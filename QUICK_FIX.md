@@ -82,6 +82,8 @@ If the service provider is still not found, manually register it in `config/app.
 ],
 ```
 
+> For detailed service provider configuration, see [SERVICE_PROVIDER.md](SERVICE_PROVIDER.md)
+
 ## Step 6: Run Package Installation
 
 After the service provider is recognized, run:
