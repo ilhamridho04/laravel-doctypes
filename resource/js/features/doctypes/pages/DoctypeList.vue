@@ -85,7 +85,8 @@
                 <div class="ml-3">
                     <h3 class="text-sm font-medium text-destructive">Error</h3>
                     <p class="mt-1 text-sm text-destructive">{{ error }}</p>
-                    <button @click="fetchDoctypes" class="mt-2 text-sm text-destructive hover:text-destructive/80 underline">
+                    <button @click="fetchDoctypes"
+                        class="mt-2 text-sm text-destructive hover:text-destructive/80 underline">
                         Try again
                     </button>
                 </div>

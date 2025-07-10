@@ -9,12 +9,15 @@ A dynamic DocType system for Laravel, inspired by Frappe Framework. Create dynam
 
 ## 🚀 Features
 
-- **Dynamic Models**: Create models from JSON definitions
-- **Form Builder**: Vue 3 + Tailwind CSS form components
-- **API Generator**: Automatic CRUD API generation
-- **Field Types**: Support for various field types (text, email, select, etc.)
-- **Validation**: Built-in validation rules
-- **TypeScript Support**: Full TypeScript integration
+- 🔧 **Dynamic DocType Generator** - Create models, controllers, requests, resources, and migrations automatically
+- 🚀 **Vue 3 + TypeScript Frontend** - Modern, type-safe components for form building and rendering
+- 🎨 **Tailwind v4 + shadcn-vue Compatible** - Modern design system with full Tailwind v4 support
+- 📝 **Dynamic Form Generation** - Generate forms on-the-fly based on DocType field definitions
+- 🎯 **Field Types Support** - Text, textarea, number, email, password, select, checkbox, date, datetime, time, file, image, JSON
+- 🔍 **Validation & Error Handling** - Built-in validation with custom error messages
+- 📊 **JSON Field Metadata** - Store complex field configurations in JSON format
+- 🔒 **Laravel Integration** - Seamless integration with Laravel's service container and routing
+- 📚 **Comprehensive Documentation** - Full API docs, guides, and troubleshooting resources
 
 ## 📚 Documentation
 
@@ -124,6 +127,24 @@ This package is open-sourced software licensed under the [MIT license](LICENSE).
 ## 🙏 Credits
 
 Inspired by [Frappe Framework](https://frappeframework.com/)'s DocType system.
+
+## Changelog
+
+### v1.2.0 - Tailwind v4 Compatibility Update
+- ✅ **Fixed Tailwind v4 compatibility** - Removed all `@apply` directives and updated CSS classes
+- ✅ **Added shadcn-vue support** - Updated all components to use shadcn-vue design tokens
+- ✅ **Fixed `file:mr-4` utility error** - Resolved file input styling issues
+- ✅ **Modernized component styling** - Updated focus states, colors, and interactive elements
+- ✅ **Enhanced accessibility** - Improved focus indicators and color contrast
+- 📚 **Added migration guide** - See `TAILWIND_V4_UPDATE.md` for detailed changes
+
+### v1.1.0 - Generator & Documentation
+- ✅ **Added DocType Generator** - `php artisan doctype:generate` command with full customization options
+- ✅ **Enhanced Documentation** - Complete API docs, quickstart guide, and troubleshooting
+- ✅ **Fixed Frontend Publishing** - Resolved duplicate folder issues in service provider
+- ✅ **Added Installation Command** - `php artisan doctype:install` for easy setup
+
+### v1.0.0 - Initial Release
 
 ---
 

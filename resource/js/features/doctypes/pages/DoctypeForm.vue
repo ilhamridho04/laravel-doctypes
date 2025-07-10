@@ -100,141 +100,141 @@
                         <DocumentIcon class="mx-auto h-8 w-8 text-muted-foreground mb-2" />
                         <p>No fields added yet. Click "Add Field" to start building your form.</p>
                     </div>
-                        <p>No fields defined yet. Click "Add Field" to get started.</p>
-                    </div>
+                    <p>No fields defined yet. Click "Add Field" to get started.</p>
+                </div>
 
-                    <div v-else class="space-y-4">
-                        <div v-for="(field, index) in formData.fields" :key="field.fieldname || index"
-                            class="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                            <div class="flex items-center justify-between mb-4">
-                                <h3 class="text-sm font-medium text-gray-900">
-                                    Field {{ index + 1 }}: {{ field.label || 'Untitled Field' }}
-                                </h3>
-                                <button type="button" @click="removeField(index)"
-                                    class="text-red-600 hover:text-red-500" title="Remove field">
-                                    <TrashIcon class="h-4 w-4" />
-                                </button>
+                <div v-else class="space-y-4">
+                    <div v-for="(field, index) in formData.fields" :key="field.fieldname || index"
+                        class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-sm font-medium text-gray-900">
+                                Field {{ index + 1 }}: {{ field.label || 'Untitled Field' }}
+                            </h3>
+                            <button type="button" @click="removeField(index)" class="text-red-600 hover:text-red-500"
+                                title="Remove field">
+                                <TrashIcon class="h-4 w-4" />
+                            </button>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <div>
+                                <label :for="`field-${index}-name`"
+                                    class="block text-sm font-medium text-gray-700 mb-1">
+                                    Field Name <span class="text-red-500">*</span>
+                                </label>
+                                <input :id="`field-${index}-name`" type="text" v-model="field.fieldname" required
+                                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                    placeholder="first_name" />
                             </div>
 
-                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                <div>
-                                    <label :for="`field-${index}-name`"
-                                        class="block text-sm font-medium text-gray-700 mb-1">
-                                        Field Name <span class="text-red-500">*</span>
-                                    </label>
-                                    <input :id="`field-${index}-name`" type="text" v-model="field.fieldname" required
-                                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                        placeholder="first_name" />
-                                </div>
+                            <div>
+                                <label :for="`field-${index}-label`"
+                                    class="block text-sm font-medium text-gray-700 mb-1">
+                                    Label <span class="text-red-500">*</span>
+                                </label>
+                                <input :id="`field-${index}-label`" type="text" v-model="field.label" required
+                                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                    placeholder="First Name" />
+                            </div>
 
-                                <div>
-                                    <label :for="`field-${index}-label`"
-                                        class="block text-sm font-medium text-gray-700 mb-1">
-                                        Label <span class="text-red-500">*</span>
-                                    </label>
-                                    <input :id="`field-${index}-label`" type="text" v-model="field.label" required
-                                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                        placeholder="First Name" />
-                                </div>
+                            <div>
+                                <label :for="`field-${index}-type`"
+                                    class="block text-sm font-medium text-gray-700 mb-1">
+                                    Field Type <span class="text-red-500">*</span>
+                                </label>
+                                <select :id="`field-${index}-type`" v-model="field.fieldtype" required
+                                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                    <option value="">Select type</option>
+                                    <option value="text">Text</option>
+                                    <option value="textarea">Textarea</option>
+                                    <option value="number">Number</option>
+                                    <option value="email">Email</option>
+                                    <option value="password">Password</option>
+                                    <option value="select">Select</option>
+                                    <option value="checkbox">Checkbox</option>
+                                    <option value="date">Date</option>
+                                    <option value="datetime">DateTime</option>
+                                    <option value="time">Time</option>
+                                    <option value="file">File</option>
+                                    <option value="image">Image</option>
+                                    <option value="json">JSON</option>
+                                </select>
+                            </div>
 
-                                <div>
-                                    <label :for="`field-${index}-type`"
-                                        class="block text-sm font-medium text-gray-700 mb-1">
-                                        Field Type <span class="text-red-500">*</span>
-                                    </label>
-                                    <select :id="`field-${index}-type`" v-model="field.fieldtype" required
-                                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                                        <option value="">Select type</option>
-                                        <option value="text">Text</option>
-                                        <option value="textarea">Textarea</option>
-                                        <option value="number">Number</option>
-                                        <option value="email">Email</option>
-                                        <option value="password">Password</option>
-                                        <option value="select">Select</option>
-                                        <option value="checkbox">Checkbox</option>
-                                        <option value="date">Date</option>
-                                        <option value="datetime">DateTime</option>
-                                        <option value="time">Time</option>
-                                        <option value="file">File</option>
-                                        <option value="image">Image</option>
-                                        <option value="json">JSON</option>
-                                    </select>
-                                </div>
+                            <div class="md:col-span-2 lg:col-span-3">
+                                <label :for="`field-${index}-description`"
+                                    class="block text-sm font-medium text-gray-700 mb-1">
+                                    Description
+                                </label>
+                                <input :id="`field-${index}-description`" type="text" v-model="field.description"
+                                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                    placeholder="Brief description of this field" />
+                            </div>
 
-                                <div class="md:col-span-2 lg:col-span-3">
-                                    <label :for="`field-${index}-description`"
-                                        class="block text-sm font-medium text-gray-700 mb-1">
-                                        Description
-                                    </label>
-                                    <input :id="`field-${index}-description`" type="text" v-model="field.description"
-                                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                        placeholder="Brief description of this field" />
-                                </div>
-
-                                <!-- Select Options -->
-                                <div v-if="field.fieldtype === 'select'" class="md:col-span-2 lg:col-span-3">
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">
-                                        Select Options
-                                    </label>
-                                    <div class="space-y-2">
-                                        <div v-for="(option, optIndex) in getSelectOptions(field)" :key="optIndex"
-                                            class="flex items-center space-x-2">
-                                            <input type="text" v-model="getSelectOptions(field)[optIndex]"
-                                                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                                placeholder="Option value" />
-                                            <button type="button" @click="removeSelectOption(field, optIndex)"
-                                                class="text-red-600 hover:text-red-500">
-                                                <TrashIcon class="h-4 w-4" />
-                                            </button>
-                                        </div>
-                                        <button type="button" @click="addSelectOption(field)"
-                                            class="text-indigo-600 hover:text-indigo-500 text-sm">
-                                            + Add Option
+                            <!-- Select Options -->
+                            <div v-if="field.fieldtype === 'select'" class="md:col-span-2 lg:col-span-3">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">
+                                    Select Options
+                                </label>
+                                <div class="space-y-2">
+                                    <div v-for="(option, optIndex) in getSelectOptions(field)" :key="optIndex"
+                                        class="flex items-center space-x-2">
+                                        <input type="text" v-model="getSelectOptions(field)[optIndex]"
+                                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                            placeholder="Option value" />
+                                        <button type="button" @click="removeSelectOption(field, optIndex)"
+                                            class="text-red-600 hover:text-red-500">
+                                            <TrashIcon class="h-4 w-4" />
                                         </button>
                                     </div>
+                                    <button type="button" @click="addSelectOption(field)"
+                                        class="text-indigo-600 hover:text-indigo-500 text-sm">
+                                        + Add Option
+                                    </button>
                                 </div>
+                            </div>
 
-                                <!-- Field Options -->
-                                <div class="flex items-center space-x-4 md:col-span-2 lg:col-span-3">
-                                    <label class="flex items-center">
-                                        <input type="checkbox" v-model="field.required"
-                                            class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" />
-                                        <span class="ml-2 text-sm text-gray-700">Required</span>
-                                    </label>
-                                    <label class="flex items-center">
-                                        <input type="checkbox" v-model="field.unique"
-                                            class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" />
-                                        <span class="ml-2 text-sm text-gray-700">Unique</span>
-                                    </label>
-                                    <label class="flex items-center">
-                                        <input type="checkbox" v-model="field.in_list_view"
-                                            class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" />
-                                        <span class="ml-2 text-sm text-gray-700">Show in List</span>
-                                    </label>
-                                    <label class="flex items-center">
-                                        <input type="checkbox" v-model="field.in_standard_filter"
-                                            class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" />
-                                        <span class="ml-2 text-sm text-gray-700">Filterable</span>
-                                    </label>
-                                </div>
+                            <!-- Field Options -->
+                            <div class="flex items-center space-x-4 md:col-span-2 lg:col-span-3">
+                                <label class="flex items-center">
+                                    <input type="checkbox" v-model="field.required"
+                                        class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" />
+                                    <span class="ml-2 text-sm text-gray-700">Required</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" v-model="field.unique"
+                                        class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" />
+                                    <span class="ml-2 text-sm text-gray-700">Unique</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" v-model="field.in_list_view"
+                                        class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" />
+                                    <span class="ml-2 text-sm text-gray-700">Show in List</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" v-model="field.in_standard_filter"
+                                        class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" />
+                                    <span class="ml-2 text-sm text-gray-700">Filterable</span>
+                                </label>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <!-- Form Actions -->
-                <div class="flex items-center justify-end space-x-4">
-                    <button type="button" @click="$emit('cancel')"
-                        class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                        Cancel
-                    </button>
-                    <button type="submit" :disabled="loading"
-                        class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50">
-                        {{ loading ? 'Saving...' : (isEditing ? 'Update DocType' : 'Create DocType') }}
-                    </button>
-                </div>
-            </form>
         </div>
+
+        <!-- Form Actions -->
+        <div class="flex items-center justify-end space-x-4">
+            <button type="button" @click="$emit('cancel')"
+                class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                Cancel
+            </button>
+            <button type="submit" :disabled="loading"
+                class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50">
+                {{ loading ? 'Saving...' : (isEditing ? 'Update DocType' : 'Create DocType') }}
+            </button>
+        </div>
+        </form>
+    </div>
     </div>
 </template>
 
