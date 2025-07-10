@@ -105,6 +105,48 @@ All documentation is available in the `docs/` folder:
    Route::apiResource('customers', CustomerController::class);
    ```
 
+## 🚀 New: Form Schema Generation
+
+The package now includes **comprehensive form schema generation** from DocType configurations:
+
+### Key Features:
+- **🎯 Dynamic Form Generation** - Convert DocType fields to Vue form schemas automatically
+- **📝 Smart Field Mapping** - Backend field types map to appropriate HTML input types
+- **✅ Built-in Validation** - Frontend and backend validation based on field configuration
+- **🔄 Real-time CRUD** - Generated forms connect directly to API endpoints
+- **🛠️ File Generation** - Auto-generate Laravel models, controllers, and migrations
+- **📱 Demo Interface** - Complete demo page showing the full workflow
+
+### Quick Example:
+```vue
+<!-- Simple usage -->
+<GeneratedForm 
+    doctype-name="product" 
+    @submit="handleSubmit" 
+/>
+
+<!-- With editing -->
+<GeneratedForm 
+    doctype-name="product"
+    :record-id="editingId"
+    @save="handleSave" 
+/>
+```
+
+### API Integration:
+```javascript
+// Get form schema
+const response = await fetchDoctypeSchema('product');
+
+// Generate Laravel files
+await generateDoctypeFiles('product', {
+    types: ['model', 'controller', 'migration'],
+    force: true
+});
+```
+
+📖 **[Complete Form Schema Guide →](FORM_SCHEMA_GUIDE.md)**
+
 ## 🛠️ Requirements
 
 - PHP 8.1+
@@ -129,6 +171,11 @@ This package is open-sourced software licensed under the [MIT license](LICENSE).
 Inspired by [Frappe Framework](https://frappeframework.com/)'s DocType system.
 
 ## Changelog
+
+### v1.2.1 - Bug Fix Release
+- 🐛 **Fixed duplicate method error** - Resolved "Cannot redeclare generateFile()" error in DoctypeGeneratorService
+- ✅ **Improved code quality** - Consolidated duplicate method definitions and improved method signatures
+- 🧪 **Added tests** - Verified package loads correctly without fatal errors
 
 ### v1.2.0 - Tailwind v4 Compatibility Update
 - ✅ **Fixed Tailwind v4 compatibility** - Removed all `@apply` directives and updated CSS classes

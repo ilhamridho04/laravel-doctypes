@@ -98,6 +98,176 @@
 
 <script setup lang="ts">
     import { ref, computed, onMounted, watch } from 'vue';
+    import { ExclamationCircleIcon, DocumentIcon } from '@heroicons/vue/24/outline';
+    import FieldRenderer from '../components/FieldRenderer.vue';
+    import { useDoctypes } from '../services/useDoctypes';
+    import type {
+        Doctype,
+        DoctypeFormSchema,
+        DynamicFormData,
+        FormErrors
+    } from '../types/doctype';
+
+    interface Props {
+        doctypeName: string;
+        recordId?: string | number;
+        readonly?: boolean;
+        showDebug?: boolean;
+    }
+
+    interface Emits {
+        (event: 'submit', data: DynamicFormData): void;
+        (event: 'cancel'): void;
+        (event: 'save', data: DynamicFormData): void;
+    }
+
+    const props = withDefaults(defineProps<Props>(), {
+        readonly: false,
+        showDebug: false,
+    });
+
+    const emit = defineEmits<Emits>();
+
+    const {
+        loading,
+        error,
+        fetchDoctypeSchema,
+        initializeFormData,
+        updateFormField,
+        validateForm,
+        submitFormData,
+        formData,
+        formErrors
+    } = useDoctypes();
+
+    const doctype = ref<Doctype | null>(null);
+    const schema = ref<DoctypeFormSchema[]>([]);
+    const saving = ref(false);
+
+    // Load schema when component mounts or doctypeName changes
+    const loadSchema = async () => {
+        if (!props.doctypeName) return;
+
+        try {
+            const response = await fetchDoctypeSchema(props.doctypeName);
+            doctype.value = response.doctype;
+            schema.value = response.schema;
+
+            // Initialize form data with default values
+            initializeFormData(schema.value);
+
+            // If editing existing record, load its data
+            if (props.recordId) {
+                await loadRecordData();
+            }
+        } catch (err) {
+            console.error('Failed to load schema:', err);
+        }
+    };
+
+    // Load existing record data for editing
+    const loadRecordData = async () => {
+        if (!props.recordId || !props.doctypeName) return;
+
+        try {
+            const response = await fetch(`/api/${props.doctypeName}/${props.recordId}`);
+            if (response.ok) {
+                const data = await response.json();
+                // Update form data with loaded record
+                Object.keys(data).forEach(key => {
+                    if (formData.value.hasOwnProperty(key)) {
+                        updateFormField(key, data[key]);
+                    }
+                });
+            }
+        } catch (err) {
+            console.error('Failed to load record data:', err);
+        }
+    };
+
+    // Handle field updates
+    const updateField = (fieldName: string, value: any) => {
+        updateFormField(fieldName, value);
+    };
+
+    // Validate specific field
+    const validateField = (fieldName: string) => {
+        const field = schema.value.find(f => f.name === fieldName);
+        if (!field) return;
+
+        validateForm([field]);
+    };
+
+    // Check if form is valid
+    const isFormValid = computed(() => {
+        return Object.keys(formErrors.value).length === 0;
+    });
+
+    // Submit form
+    const submitForm = async () => {
+        if (!validateForm(schema.value)) {
+            return;
+        }
+
+        saving.value = true;
+
+        try {
+            if (props.recordId) {
+                // Update existing record
+                const response = await fetch(`/api/${props.doctypeName}/${props.recordId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData.value)
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    emit('save', data);
+                }
+            } else {
+                // Create new record
+                const data = await submitFormData(props.doctypeName, formData.value);
+                emit('submit', data);
+            }
+        } catch (err) {
+            console.error('Failed to submit form:', err);
+        } finally {
+            saving.value = false;
+        }
+    };
+
+    // Reset form to initial state
+    const resetForm = () => {
+        initializeFormData(schema.value);
+    };
+
+    // Get field CSS classes for layout
+    const getFieldClasses = (field: DoctypeFormSchema) => {
+        if (field.type === 'textarea' || field.type === 'json') {
+            return 'md:col-span-2';
+        }
+        return 'md:col-span-1';
+    };
+
+    // Get initials for avatar
+    const getInitials = (name: string) => {
+        return name
+            .split(' ')
+            .map(word => word.charAt(0))
+            .join('')
+            .toUpperCase()
+            .slice(0, 2);
+    };
+
+    // Watch for doctypeName changes
+    watch(() => props.doctypeName, loadSchema, { immediate: true });
+
+    onMounted(() => {
+        loadSchema();
+    });
+</script>
     import { useDoctypes } from '../services/useDoctypes';
     import FieldRenderer from '../components/FieldRenderer.vue';
     import type {

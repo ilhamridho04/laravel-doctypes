@@ -186,80 +186,216 @@ class DoctypeSeeder extends Seeder
             'sort_order' => 8,
         ]);
 
-        // Sample Product DocType
+        // Advanced Product DocType with various field types
         $product = Doctype::create([
             'name' => 'product',
             'label' => 'Product',
             'description' => 'Product catalog management',
             'is_active' => true,
             'is_system' => false,
-            'icon' => 'package',
-            'color' => '#f59e0b',
+            'icon' => 'cube',
+            'color' => '#10b981',
         ]);
 
         $product->addField([
             'fieldname' => 'name',
             'label' => 'Product Name',
-            'fieldtype' => 'text',
+            'fieldtype' => 'Data',
             'required' => true,
             'in_list_view' => true,
+            'options' => json_encode([
+                'placeholder' => 'Enter product name',
+                'max_length' => 100
+            ]),
             'sort_order' => 1,
         ]);
 
         $product->addField([
-            'fieldname' => 'sku',
-            'label' => 'SKU',
-            'fieldtype' => 'text',
-            'required' => true,
-            'unique' => true,
-            'in_list_view' => true,
+            'fieldname' => 'description',
+            'label' => 'Description',
+            'fieldtype' => 'Long Text',
+            'required' => false,
+            'options' => json_encode([
+                'placeholder' => 'Enter product description',
+                'rows' => 4
+            ]),
             'sort_order' => 2,
         ]);
 
         $product->addField([
             'fieldname' => 'price',
             'label' => 'Price',
-            'fieldtype' => 'number',
-            'options' => [
-                'min' => 0,
-                'step' => 0.01
-            ],
+            'fieldtype' => 'Currency',
             'required' => true,
             'in_list_view' => true,
+            'options' => json_encode([
+                'min' => 0,
+                'step' => 0.01,
+                'placeholder' => '0.00'
+            ]),
             'sort_order' => 3,
         ]);
 
         $product->addField([
             'fieldname' => 'category',
             'label' => 'Category',
-            'fieldtype' => 'select',
-            'options' => [
-                'options' => ['electronics', 'clothing', 'books', 'home', 'sports'],
-                'placeholder' => 'Select category'
-            ],
+            'fieldtype' => 'Select',
             'required' => true,
             'in_list_view' => true,
             'in_standard_filter' => true,
+            'options' => json_encode([
+                'options' => [
+                    'electronics' => 'Electronics',
+                    'clothing' => 'Clothing',
+                    'books' => 'Books',
+                    'home' => 'Home & Garden',
+                    'sports' => 'Sports & Outdoors'
+                ]
+            ]),
             'sort_order' => 4,
         ]);
 
         $product->addField([
-            'fieldname' => 'description',
-            'label' => 'Description',
-            'fieldtype' => 'textarea',
+            'fieldname' => 'is_featured',
+            'label' => 'Featured Product',
+            'fieldtype' => 'Check',
             'required' => false,
+            'in_list_view' => true,
+            'in_standard_filter' => true,
+            'default_value' => 0,
             'sort_order' => 5,
         ]);
 
         $product->addField([
-            'fieldname' => 'in_stock',
-            'label' => 'In Stock',
-            'fieldtype' => 'checkbox',
+            'fieldname' => 'launch_date',
+            'label' => 'Launch Date',
+            'fieldtype' => 'Date',
             'required' => false,
-            'default_value' => true,
+            'in_list_view' => true,
+            'sort_order' => 6,
+        ]);
+
+        $product->addField([
+            'fieldname' => 'specifications',
+            'label' => 'Specifications',
+            'fieldtype' => 'JSON',
+            'required' => false,
+            'options' => json_encode([
+                'placeholder' => '{"key": "value"}',
+                'rows' => 6
+            ]),
+            'sort_order' => 7,
+        ]);
+
+        $product->addField([
+            'fieldname' => 'product_image',
+            'label' => 'Product Image',
+            'fieldtype' => 'Attach Image',
+            'required' => false,
+            'options' => json_encode([
+                'accept' => 'image/*',
+                'multiple' => false
+            ]),
+            'sort_order' => 8,
+        ]);
+
+        // Blog Post DocType
+        $blogPost = Doctype::create([
+            'name' => 'blog_post',
+            'label' => 'Blog Post',
+            'description' => 'Blog post management system',
+            'is_active' => true,
+            'is_system' => false,
+            'icon' => 'document-text',
+            'color' => '#8b5cf6',
+        ]);
+
+        $blogPost->addField([
+            'fieldname' => 'title',
+            'label' => 'Title',
+            'fieldtype' => 'Data',
+            'required' => true,
+            'in_list_view' => true,
+            'options' => json_encode([
+                'placeholder' => 'Enter blog post title',
+                'max_length' => 150
+            ]),
+            'sort_order' => 1,
+        ]);
+
+        $blogPost->addField([
+            'fieldname' => 'slug',
+            'label' => 'URL Slug',
+            'fieldtype' => 'Data',
+            'required' => true,
+            'unique' => true,
+            'options' => json_encode([
+                'placeholder' => 'url-friendly-slug',
+                'pattern' => '^[a-z0-9-]+$'
+            ]),
+            'sort_order' => 2,
+        ]);
+
+        $blogPost->addField([
+            'fieldname' => 'content',
+            'label' => 'Content',
+            'fieldtype' => 'Long Text',
+            'required' => true,
+            'options' => json_encode([
+                'placeholder' => 'Write your blog post content here...',
+                'rows' => 10
+            ]),
+            'sort_order' => 3,
+        ]);
+
+        $blogPost->addField([
+            'fieldname' => 'status',
+            'label' => 'Status',
+            'fieldtype' => 'Select',
+            'required' => true,
             'in_list_view' => true,
             'in_standard_filter' => true,
+            'default_value' => 'draft',
+            'options' => json_encode([
+                'options' => [
+                    'draft' => 'Draft',
+                    'published' => 'Published',
+                    'archived' => 'Archived'
+                ]
+            ]),
+            'sort_order' => 4,
+        ]);
+
+        $blogPost->addField([
+            'fieldname' => 'publish_date',
+            'label' => 'Publish Date',
+            'fieldtype' => 'Datetime',
+            'required' => false,
+            'in_list_view' => true,
+            'sort_order' => 5,
+        ]);
+
+        $blogPost->addField([
+            'fieldname' => 'tags',
+            'label' => 'Tags',
+            'fieldtype' => 'Data',
+            'required' => false,
+            'options' => json_encode([
+                'placeholder' => 'Enter comma-separated tags'
+            ]),
             'sort_order' => 6,
+        ]);
+
+        $blogPost->addField([
+            'fieldname' => 'featured_image',
+            'label' => 'Featured Image',
+            'fieldtype' => 'Attach Image',
+            'required' => false,
+            'options' => json_encode([
+                'accept' => 'image/jpeg,image/png,image/webp',
+                'multiple' => false
+            ]),
+            'sort_order' => 7,
         ]);
     }
 }

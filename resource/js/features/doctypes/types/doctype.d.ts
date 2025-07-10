@@ -44,17 +44,45 @@ export type FieldType =
     | 'image'
     | 'json';
 
+// Form Schema for dynamic form generation
 export interface DoctypeFormSchema {
     name: string;
     label: string;
     type: FieldType;
-    required?: boolean;
-    unique?: boolean;
-    options?: Record<string, any>;
+    required: boolean;
     description?: string;
-    default_value?: any;
-    in_list_view?: boolean;
-    in_standard_filter?: boolean;
+    placeholder?: string;
+    options?: any[];
+    validation?: FormFieldValidation;
+    min?: number;
+    max?: number;
+    step?: number;
+    rows?: number;
+    accept?: string;
+    multiple?: boolean;
+    class?: string;
+    style?: string;
+}
+
+export interface FormFieldValidation {
+    required?: boolean;
+    minLength?: number;
+    maxLength?: number;
+    min?: number;
+    max?: number;
+    pattern?: string;
+    type?: 'email' | 'url' | 'number';
+}
+
+// API Response types
+export interface DoctypeSchemaResponse {
+    doctype: Doctype;
+    schema: DoctypeFormSchema[];
+}
+
+export interface DoctypeGenerationResponse {
+    doctype: string;
+    generated: Record<string, any>;
 }
 
 export interface DoctypeCreateRequest {
@@ -85,10 +113,6 @@ export interface DoctypeListResponse {
 export interface DoctypeResponse {
     data: Doctype;
     message?: string;
-}
-
-export interface DoctypeSchemaResponse {
-    schema: DoctypeFormSchema[];
 }
 
 export interface DoctypeFilters {
@@ -155,3 +179,7 @@ export interface DoctypeFormState {
     schema: DoctypeFormSchema[];
     doctype?: Doctype;
 }
+
+// Dynamic form management
+export type DynamicFormData = Record<string, any>;
+export type FormErrors = Record<string, string>;

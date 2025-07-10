@@ -22,7 +22,7 @@ class DoctypeGeneratorService
 
         foreach ($this->stubs as $type => $stubFile) {
             try {
-                $content = $this->generateFile($type, $doctype);
+                $content = $this->generateFileContent($type, $doctype);
                 $results[$type] = $content;
             } catch (\Exception $e) {
                 $results[$type] = ['error' => $e->getMessage()];
@@ -164,24 +164,6 @@ class DoctypeGeneratorService
         $replacements = $this->getReplacements($type, $doctype);
 
         return str_replace(array_keys($replacements), array_values($replacements), $content);
-    }
-
-    public function generateFile(string $type, Doctype $doctype): string
-    {
-        $stubPath = __DIR__ . '/../stubs/' . $this->stubs[$type];
-
-        if (!File::exists($stubPath)) {
-            throw new \Exception("Stub file not found: {$stubPath}");
-        }
-
-        $stub = File::get($stubPath);
-        $replacements = $this->getReplacements($type, $doctype);
-
-        foreach ($replacements as $placeholder => $replacement) {
-            $stub = str_replace($placeholder, $replacement, $stub);
-        }
-
-        return $stub;
     }
 
     protected function getReplacements(string $type, Doctype $doctype): array
@@ -462,5 +444,163 @@ class DoctypeGeneratorService
         $definition .= ';';
 
         return $definition;
+    }
+
+    /**
+     * Generate form schema for frontend from Doctype
+     */
+    public function generateFormSchema(Doctype $doctype): array
+    {
+        $schema = [];
+
+        foreach ($doctype->doctypeFields as $field) {
+            $fieldSchema = [
+                'name' => $field->fieldname,
+                'label' => $field->label ?: Str::title(str_replace('_', ' ', $field->fieldname)),
+                'type' => $this->mapFieldTypeToFormType($field->fieldtype),
+                'required' => (bool) $field->reqd,
+                'description' => $field->description,
+                'placeholder' => $field->options['placeholder'] ?? '',
+            ];
+
+            // Add field-specific options
+            $fieldSchema = $this->addFieldSpecificOptions($fieldSchema, $field);
+
+            // Add validation rules
+            $fieldSchema['validation'] = $this->generateFieldValidation($field);
+
+            $schema[] = $fieldSchema;
+        }
+
+        return $schema;
+    }
+
+    /**
+     * Map backend field types to frontend form types
+     */
+    protected function mapFieldTypeToFormType(string $fieldType): string
+    {
+        $mapping = [
+            'Data' => 'text',
+            'Text' => 'textarea',
+            'Small Text' => 'text',
+            'Long Text' => 'textarea',
+            'Int' => 'number',
+            'Float' => 'number',
+            'Currency' => 'number',
+            'Check' => 'checkbox',
+            'Select' => 'select',
+            'Link' => 'select',
+            'Date' => 'date',
+            'Datetime' => 'datetime',
+            'Time' => 'time',
+            'Attach' => 'file',
+            'Attach Image' => 'image',
+            'Password' => 'password',
+            'Code' => 'textarea',
+            'Text Editor' => 'textarea',
+            'HTML Editor' => 'textarea',
+            'JSON' => 'json',
+        ];
+
+        return $mapping[$fieldType] ?? 'text';
+    }
+
+    /**
+     * Add field-specific options to schema
+     */
+    protected function addFieldSpecificOptions(array $schema, $field): array
+    {
+        $options = is_string($field->options) ? json_decode($field->options, true) : $field->options;
+
+        if (!$options) {
+            $options = [];
+        }
+
+        switch ($schema['type']) {
+            case 'select':
+                $schema['options'] = $options['options'] ?? [];
+                break;
+
+            case 'number':
+                if (isset($options['min']))
+                    $schema['min'] = $options['min'];
+                if (isset($options['max']))
+                    $schema['max'] = $options['max'];
+                if (isset($options['step']))
+                    $schema['step'] = $options['step'];
+                break;
+
+            case 'textarea':
+                $schema['rows'] = $options['rows'] ?? 3;
+                break;
+
+            case 'file':
+            case 'image':
+                if (isset($options['accept']))
+                    $schema['accept'] = $options['accept'];
+                if (isset($options['multiple']))
+                    $schema['multiple'] = $options['multiple'];
+                break;
+        }
+
+        // Add any custom options
+        if (isset($options['class']))
+            $schema['class'] = $options['class'];
+        if (isset($options['style']))
+            $schema['style'] = $options['style'];
+
+        return $schema;
+    }
+
+    /**
+     * Generate field validation rules for frontend
+     */
+    protected function generateFieldValidation($field): array
+    {
+        $validation = [];
+
+        if ($field->reqd) {
+            $validation['required'] = true;
+        }
+
+        $options = is_string($field->options) ? json_decode($field->options, true) : $field->options;
+
+        if ($options) {
+            if (isset($options['min_length'])) {
+                $validation['minLength'] = $options['min_length'];
+            }
+
+            if (isset($options['max_length'])) {
+                $validation['maxLength'] = $options['max_length'];
+            }
+
+            if (isset($options['pattern'])) {
+                $validation['pattern'] = $options['pattern'];
+            }
+
+            if (isset($options['min'])) {
+                $validation['min'] = $options['min'];
+            }
+
+            if (isset($options['max'])) {
+                $validation['max'] = $options['max'];
+            }
+        }
+
+        // Add type-specific validation
+        switch ($this->mapFieldTypeToFormType($field->fieldtype)) {
+            case 'email':
+                $validation['type'] = 'email';
+                break;
+            case 'url':
+                $validation['type'] = 'url';
+                break;
+            case 'number':
+                $validation['type'] = 'number';
+                break;
+        }
+
+        return $validation;
     }
 }

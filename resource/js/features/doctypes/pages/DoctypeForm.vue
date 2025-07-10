@@ -1,106 +1,147 @@
 <template>
-    <div class="doctype-form">
-        <div class="max-w-4xl mx-auto">
-            <div class="mb-8">
-                <h1 class="text-2xl font-semibold text-foreground">
-                    {{ isEditing ? 'Edit DocType' : 'Create DocType' }}
-                </h1>
-                <p class="mt-2 text-sm text-muted-foreground">
-                    {{ isEditing ? 'Update your doctype configuration' : 'Define a new document type with custom fields'
-                    }}
-                </p>
-            </div>
+    <div class="doctype-form max-w-4xl mx-auto p-6">
+        <!-- Header -->
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-foreground">
+                {{ isEditing ? 'Edit DocType' : 'Create DocType' }}
+            </h1>
+            <p class="mt-2 text-muted-foreground">
+                {{ isEditing ? 'Update your doctype configuration' : 'Define a new document type with custom fields' }}
+            </p>
+        </div>
 
-            <form @submit.prevent="submitForm" class="space-y-8">
-                <!-- Basic Information -->
-                <div class="bg-card shadow-sm rounded-lg p-6 border border-border">
-                    <h2 class="text-lg font-medium text-foreground mb-6">Basic Information</h2>
+        <form @submit.prevent="submitForm" class="space-y-8">
+            <!-- Basic Information -->
+            <div class="bg-card rounded-lg border border-border p-6 shadow-sm">
+                <h2 class="text-xl font-semibold text-foreground mb-6">Basic Information</h2>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label for="name" class="block text-sm font-medium text-foreground mb-2">
-                                Name <span class="text-destructive">*</span>
-                            </label>
-                            <input id="name" type="text" v-model="formData.name" :disabled="isEditing" required
-                                class="block w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50"
-                                :class="{ 'opacity-50 cursor-not-allowed': isEditing }" placeholder="user_profile" />
-                            <p class="mt-1 text-sm text-muted-foreground">
-                                Unique identifier (letters, numbers, underscores only)
-                            </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <label for="name" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                            Name <span class="text-destructive">*</span>
+                        </label>
+                        <input 
+                            id="name" 
+                            type="text" 
+                            v-model="formData.name" 
+                            :disabled="isEditing" 
+                            required
+                            class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                            placeholder="user_profile" 
+                        />
+                        <p class="text-sm text-muted-foreground">
+                            Unique identifier (letters, numbers, underscores only)
+                        </p>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label for="label" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                            Label <span class="text-destructive">*</span>
+                        </label>
+                        <input 
+                            id="label" 
+                            type="text" 
+                            v-model="formData.label" 
+                            required
+                            class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                            placeholder="User Profile" 
+                        />
+                        <p class="text-sm text-muted-foreground">
+                            Display name for the doctype
+                        </p>
+                    </div>
+
+                    <div class="md:col-span-2 space-y-2">
+                        <label for="description" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                            Description
+                        </label>
+                        <textarea 
+                            id="description" 
+                            v-model="formData.description" 
+                            rows="3"
+                            class="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                            placeholder="Brief description of what this doctype represents" 
+                        />
+                    </div>
+
+                    <div class="space-y-2">
+                        <label for="icon" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                            Icon
+                        </label>
+                        <input 
+                            id="icon" 
+                            type="text" 
+                            v-model="formData.icon"
+                            class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                            placeholder="user" 
+                        />
+                        <p class="text-sm text-muted-foreground">
+                            Icon identifier (e.g., user, document, settings)
+                        </p>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label for="color" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                            Color
+                        </label>
+                        <div class="flex items-center space-x-2">
+                            <input 
+                                id="color" 
+                                type="color" 
+                                v-model="formData.color"
+                                class="h-10 w-16 rounded-md border border-input cursor-pointer" 
+                            />
+                            <input 
+                                type="text" 
+                                v-model="formData.color"
+                                class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                placeholder="#3b82f6" 
+                            />
                         </div>
+                    </div>
 
-                        <div>
-                            <label for="label" class="block text-sm font-medium text-foreground mb-2">
-                                Label <span class="text-destructive">*</span>
-                            </label>
-                            <input id="label" type="text" v-model="formData.label" required
-                                class="block w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                                placeholder="User Profile" />
-                            <p class="mt-1 text-sm text-muted-foreground">
-                                Display name for the doctype
-                            </p>
-                        </div>
-
-                        <div class="md:col-span-2">
-                            <label for="description" class="block text-sm font-medium text-foreground mb-2">
-                                Description
-                            </label>
-                            <textarea id="description" v-model="formData.description" rows="3"
-                                class="block w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                                placeholder="Brief description of what this doctype represents" />
-                        </div>
-
-                        <div>
-                            <label for="icon" class="block text-sm font-medium text-foreground mb-2">
-                                Icon
-                            </label>
-                            <input id="icon" type="text" v-model="formData.icon"
-                                class="block w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                                placeholder="user" />
-                            <p class="mt-1 text-sm text-muted-foreground">
-                                Icon identifier (e.g., user, document, settings)
-                            </p>
-                        </div>
-
-                        <div>
-                            <label for="color" class="block text-sm font-medium text-foreground mb-2">
-                                Color
-                            </label>
-                            <div class="flex items-center space-x-2">
-                                <input id="color" type="color" v-model="formData.color"
-                                    class="h-10 w-16 rounded border border-input cursor-pointer" />
-                                <input type="text" v-model="formData.color"
-                                    class="block w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                                    placeholder="#3b82f6" />
-                            </div>
-                        </div>
-
-                        <div class="flex items-center space-x-4">
-                            <label class="flex items-center">
-                                <input type="checkbox" v-model="formData.is_active"
-                                    class="h-4 w-4 text-primary focus:ring-ring border-input rounded" />
-                                <span class="ml-2 text-sm text-foreground">Active</span>
+                    <div class="md:col-span-2">
+                        <div class="flex items-center space-x-2">
+                            <input 
+                                id="is_active"
+                                type="checkbox" 
+                                v-model="formData.is_active"
+                                class="h-4 w-4 rounded border border-input text-primary focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                            />
+                            <label for="is_active" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                                Active
                             </label>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- Fields Configuration -->
-                <div class="bg-card shadow-sm rounded-lg p-6 border border-border">
-                    <div class="flex items-center justify-between mb-6">
-                        <h2 class="text-lg font-medium text-foreground">Fields</h2>
-                        <button type="button" @click="addField"
-                            class="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-primary bg-primary/10 hover:bg-primary/20 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ring">
-                            <PlusIcon class="h-4 w-4 mr-2" />
-                            Add Field
-                        </button>
-                    </div>
+            <!-- Fields Configuration -->
+            <div class="bg-card rounded-lg border border-border p-6 shadow-sm">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-xl font-semibold text-foreground">Fields</h2>
+                    <button 
+                        type="button" 
+                        @click="addField"
+                        class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
+                    >
+                        <PlusIcon class="w-4 h-4 mr-2" />
+                        Add Field
+                    </button>
+                </div>
 
-                    <div v-if="formData.fields.length === 0" class="text-center py-8 text-muted-foreground">
-                        <DocumentIcon class="mx-auto h-8 w-8 text-muted-foreground mb-2" />
-                        <p>No fields added yet. Click "Add Field" to start building your form.</p>
-                    </div>
-                    <p>No fields defined yet. Click "Add Field" to get started.</p>
+                <div v-if="formData.fields.length === 0" class="text-center py-12">
+                    <DocumentIcon class="mx-auto h-12 w-12 text-muted-foreground mb-4" />
+                    <h3 class="text-lg font-medium text-foreground mb-2">No fields yet</h3>
+                    <p class="text-muted-foreground mb-4">Start building your form by adding fields</p>
+                    <button 
+                        type="button" 
+                        @click="addField"
+                        class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
+                    >
+                        <PlusIcon class="w-4 h-4 mr-2" />
+                        Add Your First Field
+                    </button>
                 </div>
 
                 <div v-else class="space-y-4">

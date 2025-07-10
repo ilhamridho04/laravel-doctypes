@@ -109,10 +109,62 @@ class DoctypeController extends Controller
         ]);
     }
 
-    public function schema(Doctype $doctype): JsonResponse
+    /**
+     * Get form schema for a specific doctype
+     */
+    public function schema(string $doctypeName): JsonResponse
     {
+        $doctype = Doctype::where('name', $doctypeName)
+            ->with('doctypeFields')
+            ->first();
+
+        if (!$doctype) {
+            return response()->json([
+                'message' => 'DocType not found'
+            ], 404);
+        }
+
+        $generatorService = app(\Doctypes\Services\DoctypeGeneratorService::class);
+        $schema = $generatorService->generateFormSchema($doctype);
+
         return response()->json([
-            'schema' => $doctype->generateFormSchema()
+            'doctype' => new DoctypeResource($doctype),
+            'schema' => $schema
+        ]);
+    }
+
+    /**
+     * Generate files from doctype
+     */
+    public function generate(Request $request, string $doctypeName): JsonResponse
+    {
+        $doctype = Doctype::where('name', $doctypeName)
+            ->with('doctypeFields')
+            ->first();
+
+        if (!$doctype) {
+            return response()->json([
+                'message' => 'DocType not found'
+            ], 404);
+        }
+
+        $types = $request->get('types', ['model', 'controller', 'request', 'resource', 'migration']);
+        $force = $request->boolean('force', false);
+
+        $generatorService = app(\Doctypes\Services\DoctypeGeneratorService::class);
+
+        if ($request->boolean('preview', false)) {
+            $results = [];
+            foreach ($types as $type) {
+                $results[$type] = $generatorService->getGenerationPreview($doctype, $type);
+            }
+        } else {
+            $results = $generatorService->generateFiles($doctype, $types, $force);
+        }
+
+        return response()->json([
+            'doctype' => $doctypeName,
+            'generated' => $results
         ]);
     }
 
@@ -181,24 +233,5 @@ class DoctypeController extends Controller
         return response()->json([
             'message' => 'Field removed successfully'
         ]);
-    }
-
-    public function generate(Doctype $doctype): JsonResponse
-    {
-        $generator = new \Doctypes\Services\DoctypeGeneratorService();
-
-        try {
-            $files = $generator->generateFromDoctype($doctype);
-
-            return response()->json([
-                'message' => 'Files generated successfully',
-                'files' => $files
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Failed to generate files',
-                'error' => $e->getMessage()
-            ], 500);
-        }
     }
 }

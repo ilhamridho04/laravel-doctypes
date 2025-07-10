@@ -285,6 +285,169 @@ export const useDoctypes = () => {
 
     const totalItems = computed(() => meta.value.total);
 
+    // Get form schema for a doctype
+    const fetchDoctypeSchema = async (doctypeName: string): Promise<DoctypeSchemaResponse> => {
+        loading.value = true;
+        error.value = null;
+
+        try {
+            const response = await apiCall<DoctypeSchemaResponse>(
+                `/api/doctypes/doctypes/${doctypeName}/schema`
+            );
+            return response;
+        } catch (err) {
+            error.value = err instanceof Error ? err.message : 'Failed to fetch doctype schema';
+            throw err;
+        } finally {
+            loading.value = false;
+        }
+    };
+
+    // Generate files from doctype
+    const generateDoctypeFiles = async (
+        doctypeName: string,
+        options: {
+            types?: string[];
+            force?: boolean;
+            preview?: boolean;
+        } = {}
+    ) => {
+        loading.value = true;
+        error.value = null;
+
+        try {
+            const params = new URLSearchParams();
+            if (options.types?.length) {
+                params.append('types', JSON.stringify(options.types));
+            }
+            if (options.force) {
+                params.append('force', 'true');
+            }
+            if (options.preview) {
+                params.append('preview', 'true');
+            }
+
+            const url = `/api/doctypes/doctypes/${doctypeName}/generate${params.toString() ? '?' + params.toString() : ''}`;
+
+            const response = await apiCall(url, {
+                method: 'POST'
+            });
+
+            return response;
+        } catch (err) {
+            error.value = err instanceof Error ? err.message : 'Failed to generate files';
+            throw err;
+        } finally {
+            loading.value = false;
+        }
+    };
+
+    // Dynamic form data management
+    const formData = ref<Record<string, any>>({});
+    const formErrors = ref<Record<string, string>>({});
+
+    const initializeFormData = (schema: any[]) => {
+        const initialData: Record<string, any> = {};
+        schema.forEach(field => {
+            initialData[field.name] = getDefaultValue(field);
+        });
+        formData.value = initialData;
+        formErrors.value = {};
+    };
+
+    const getDefaultValue = (field: any) => {
+        switch (field.type) {
+            case 'checkbox':
+                return false;
+            case 'number':
+                return 0;
+            case 'select':
+                return '';
+            case 'json':
+                return {};
+            default:
+                return '';
+        }
+    };
+
+    const updateFormField = (fieldName: string, value: any) => {
+        formData.value[fieldName] = value;
+        // Clear error when user starts typing
+        if (formErrors.value[fieldName]) {
+            delete formErrors.value[fieldName];
+        }
+    };
+
+    const validateForm = (schema: any[]): boolean => {
+        formErrors.value = {};
+        let isValid = true;
+
+        schema.forEach(field => {
+            const value = formData.value[field.name];
+            const fieldErrors: string[] = [];
+
+            // Required validation
+            if (field.required && (!value || value === '')) {
+                fieldErrors.push(`${field.label} is required`);
+                isValid = false;
+            }
+
+            // Type-specific validation
+            if (value && field.validation) {
+                if (field.validation.minLength && value.length < field.validation.minLength) {
+                    fieldErrors.push(`${field.label} must be at least ${field.validation.minLength} characters`);
+                    isValid = false;
+                }
+
+                if (field.validation.maxLength && value.length > field.validation.maxLength) {
+                    fieldErrors.push(`${field.label} must not exceed ${field.validation.maxLength} characters`);
+                    isValid = false;
+                }
+
+                if (field.validation.min && Number(value) < field.validation.min) {
+                    fieldErrors.push(`${field.label} must be at least ${field.validation.min}`);
+                    isValid = false;
+                }
+
+                if (field.validation.max && Number(value) > field.validation.max) {
+                    fieldErrors.push(`${field.label} must not exceed ${field.validation.max}`);
+                    isValid = false;
+                }
+
+                if (field.validation.pattern && !new RegExp(field.validation.pattern).test(value)) {
+                    fieldErrors.push(`${field.label} format is invalid`);
+                    isValid = false;
+                }
+            }
+
+            if (fieldErrors.length > 0) {
+                formErrors.value[field.name] = fieldErrors[0]; // Show first error
+            }
+        });
+
+        return isValid;
+    };
+
+    // Submit dynamic form data
+    const submitFormData = async (doctypeName: string, data: Record<string, any>) => {
+        loading.value = true;
+        error.value = null;
+
+        try {
+            const response = await apiCall(`/api/${doctypeName}`, {
+                method: 'POST',
+                body: JSON.stringify(data)
+            });
+
+            return response;
+        } catch (err) {
+            error.value = err instanceof Error ? err.message : 'Failed to submit form';
+            throw err;
+        } finally {
+            loading.value = false;
+        }
+    };
+
     return {
         // State
         doctypes,
@@ -292,6 +455,8 @@ export const useDoctypes = () => {
         loading,
         error,
         meta,
+        formData,
+        formErrors,
 
         // Actions
         fetchDoctypes,
@@ -315,5 +480,13 @@ export const useDoctypes = () => {
         totalPages,
         currentPage,
         totalItems,
+
+        // New actions
+        fetchDoctypeSchema,
+        generateDoctypeFiles,
+        initializeFormData,
+        updateFormField,
+        validateForm,
+        submitFormData,
     };
 };
