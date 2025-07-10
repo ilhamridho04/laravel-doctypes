@@ -3,14 +3,14 @@
         <div class="mb-8">
             <div class="sm:flex sm:items-center">
                 <div class="sm:flex-auto">
-                    <h1 class="text-2xl font-semibold text-gray-900">DocTypes</h1>
-                    <p class="mt-2 text-sm text-gray-700">
+                    <h1 class="text-2xl font-semibold text-foreground">DocTypes</h1>
+                    <p class="mt-2 text-sm text-muted-foreground">
                         Manage your dynamic document types and their field structures.
                     </p>
                 </div>
                 <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
                     <button @click="createNew" type="button"
-                        class="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto">
+                        class="inline-flex items-center justify-center rounded-md border border-transparent bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 sm:w-auto">
                         <PlusIcon class="h-4 w-4 mr-2" />
                         Create DocType
                     </button>
@@ -19,23 +19,23 @@
         </div>
 
         <!-- Filters -->
-        <div class="mb-6 bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+        <div class="mb-6 bg-card p-4 rounded-lg shadow-sm border border-border">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div>
-                    <label for="search" class="block text-sm font-medium text-gray-700 mb-1">
+                    <label for="search" class="block text-sm font-medium text-foreground mb-1">
                         Search
                     </label>
                     <input id="search" type="text" v-model="filters.search" placeholder="Search doctypes..."
-                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        class="block w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                         @input="debouncedFetch" />
                 </div>
 
                 <div>
-                    <label for="status" class="block text-sm font-medium text-gray-700 mb-1">
+                    <label for="status" class="block text-sm font-medium text-foreground mb-1">
                         Status
                     </label>
                     <select id="status" v-model="filters.active"
-                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        class="block w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                         @change="fetchDoctypes">
                         <option value="">All Status</option>
                         <option :value="true">Active</option>
@@ -44,11 +44,11 @@
                 </div>
 
                 <div>
-                    <label for="type" class="block text-sm font-medium text-gray-700 mb-1">
+                    <label for="type" class="block text-sm font-medium text-foreground mb-1">
                         Type
                     </label>
                     <select id="type" v-model="filters.system"
-                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        class="block w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                         @change="fetchDoctypes">
                         <option value="">All Types</option>
                         <option :value="false">Custom</option>
@@ -57,11 +57,11 @@
                 </div>
 
                 <div>
-                    <label for="per_page" class="block text-sm font-medium text-gray-700 mb-1">
+                    <label for="per_page" class="block text-sm font-medium text-foreground mb-1">
                         Per Page
                     </label>
                     <select id="per_page" v-model="filters.per_page"
-                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        class="block w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                         @change="fetchDoctypes">
                         <option :value="10">10</option>
                         <option :value="15">15</option>
@@ -74,18 +74,18 @@
 
         <!-- Loading State -->
         <div v-if="loading" class="text-center py-8">
-            <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
-            <p class="mt-2 text-sm text-gray-500">Loading doctypes...</p>
+            <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+            <p class="mt-2 text-sm text-muted-foreground">Loading doctypes...</p>
         </div>
 
         <!-- Error State -->
-        <div v-else-if="hasError" class="bg-red-50 border border-red-200 rounded-md p-4">
+        <div v-else-if="hasError" class="bg-destructive/10 border border-destructive rounded-md p-4">
             <div class="flex">
-                <ExclamationCircleIcon class="h-5 w-5 text-red-400" />
+                <ExclamationCircleIcon class="h-5 w-5 text-destructive" />
                 <div class="ml-3">
-                    <h3 class="text-sm font-medium text-red-800">Error</h3>
-                    <p class="mt-1 text-sm text-red-700">{{ error }}</p>
-                    <button @click="fetchDoctypes" class="mt-2 text-sm text-red-600 hover:text-red-500 underline">
+                    <h3 class="text-sm font-medium text-destructive">Error</h3>
+                    <p class="mt-1 text-sm text-destructive">{{ error }}</p>
+                    <button @click="fetchDoctypes" class="mt-2 text-sm text-destructive hover:text-destructive/80 underline">
                         Try again
                     </button>
                 </div>
@@ -94,10 +94,11 @@
 
         <!-- Empty State -->
         <div v-else-if="isEmpty" class="text-center py-12">
-            <DocumentIcon class="mx-auto h-12 w-12 text-gray-400" />
-            <h3 class="mt-2 text-sm font-medium text-gray-900">No doctypes found</h3>
-            <p class="mt-1 text-sm text-gray-500">
+            <DocumentIcon class="mx-auto h-12 w-12 text-muted-foreground" />
+            <h3 class="mt-2 text-sm font-medium text-foreground">No doctypes found</h3>
+            <p class="mt-1 text-sm text-muted-foreground">
                 Get started by creating your first doctype.
+            </p>
             </p>
             <div class="mt-6">
                 <button @click="createNew" type="button"

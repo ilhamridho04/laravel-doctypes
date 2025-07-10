@@ -4,6 +4,7 @@ namespace Doctypes\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Doctypes\Console\Commands\InstallDoctypeCommand;
+use Doctypes\Console\Commands\GenerateDoctypeCommand;
 use Doctypes\Services\DoctypeGeneratorService;
 
 class DoctypeServiceProvider extends ServiceProvider
@@ -38,6 +39,7 @@ class DoctypeServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 InstallDoctypeCommand::class,
+                GenerateDoctypeCommand::class,
             ]);
 
             // Publish config

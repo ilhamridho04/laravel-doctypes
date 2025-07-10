@@ -2,37 +2,37 @@
     <div class="generated-form">
         <div class="max-w-4xl mx-auto">
             <div v-if="loading" class="text-center py-8">
-                <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
-                <p class="mt-2 text-sm text-gray-500">Loading form...</p>
+                <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+                <p class="mt-2 text-sm text-muted-foreground">Loading form...</p>
             </div>
 
-            <div v-else-if="error" class="bg-red-50 border border-red-200 rounded-md p-4">
+            <div v-else-if="error" class="bg-destructive/10 border border-destructive rounded-md p-4">
                 <div class="flex">
-                    <ExclamationCircleIcon class="h-5 w-5 text-red-400" />
+                    <ExclamationCircleIcon class="h-5 w-5 text-destructive" />
                     <div class="ml-3">
-                        <h3 class="text-sm font-medium text-red-800">Error</h3>
-                        <p class="mt-1 text-sm text-red-700">{{ error }}</p>
+                        <h3 class="text-sm font-medium text-destructive">Error</h3>
+                        <p class="mt-1 text-sm text-destructive">{{ error }}</p>
                     </div>
                 </div>
             </div>
 
             <div v-else-if="schema.length === 0" class="text-center py-12">
-                <DocumentIcon class="mx-auto h-12 w-12 text-gray-400" />
-                <h3 class="mt-2 text-sm font-medium text-gray-900">No fields defined</h3>
-                <p class="mt-1 text-sm text-gray-500">
+                <DocumentIcon class="mx-auto h-12 w-12 text-muted-foreground" />
+                <h3 class="mt-2 text-sm font-medium text-foreground">No fields defined</h3>
+                <p class="mt-1 text-sm text-muted-foreground">
                     This doctype doesn't have any fields configured yet.
                 </p>
             </div>
 
             <form v-else @submit.prevent="submitForm" class="space-y-6">
                 <!-- Form Header -->
-                <div class="bg-white shadow-sm rounded-lg p-6">
+                <div class="bg-card shadow-sm rounded-lg p-6 border border-border">
                     <div class="flex items-center justify-between">
                         <div>
-                            <h1 class="text-xl font-semibold text-gray-900">
+                            <h1 class="text-xl font-semibold text-foreground">
                                 {{ doctype?.label || 'Dynamic Form' }}
                             </h1>
-                            <p v-if="doctype?.description" class="mt-1 text-sm text-gray-500">
+                            <p v-if="doctype?.description" class="mt-1 text-sm text-muted-foreground">
                                 {{ doctype.description }}
                             </p>
                         </div>
@@ -46,7 +46,7 @@
                 </div>
 
                 <!-- Form Fields -->
-                <div class="bg-white shadow-sm rounded-lg p-6">
+                <div class="bg-card shadow-sm rounded-lg p-6 border border-border">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div v-for="field in schema" :key="field.name" :class="getFieldClasses(field)">
                             <FieldRenderer :field="field" :model-value="formData[field.name]"
@@ -58,36 +58,36 @@
                 </div>
 
                 <!-- Form Actions -->
-                <div class="bg-white shadow-sm rounded-lg p-6">
+                <div class="bg-card shadow-sm rounded-lg p-6 border border-border">
                     <div class="flex items-center justify-end space-x-4">
                         <button type="button" @click="resetForm"
-                            class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            class="px-4 py-2 text-sm font-medium text-muted-foreground bg-background border border-input rounded-md shadow-sm hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ring">
                             Reset
                         </button>
                         <button type="button" @click="$emit('cancel')"
-                            class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            class="px-4 py-2 text-sm font-medium text-muted-foreground bg-background border border-input rounded-md shadow-sm hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ring">
                             Cancel
                         </button>
                         <button type="submit" :disabled="saving || !isFormValid"
-                            class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50">
+                            class="px-4 py-2 text-sm font-medium text-primary-foreground bg-primary border border-transparent rounded-md shadow-sm hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ring disabled:opacity-50">
                             {{ saving ? 'Saving...' : 'Save' }}
                         </button>
                     </div>
                 </div>
 
                 <!-- Debug Info (Development Only) -->
-                <div v-if="showDebug" class="bg-gray-50 border border-gray-200 rounded-lg p-4">
-                    <h3 class="text-sm font-medium text-gray-900 mb-2">Debug Information</h3>
+                <div v-if="showDebug" class="bg-muted border border-border rounded-lg p-4">
+                    <h3 class="text-sm font-medium text-foreground mb-2">Debug Information</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <h4 class="text-xs font-medium text-gray-700 mb-1">Form Data</h4>
+                            <h4 class="text-xs font-medium text-muted-foreground mb-1">Form Data</h4>
                             <pre
-                                class="text-xs bg-white p-2 rounded border overflow-auto max-h-40">{{ JSON.stringify(formData, null, 2) }}</pre>
+                                class="text-xs bg-background p-2 rounded border border-border overflow-auto max-h-40">{{ JSON.stringify(formData, null, 2) }}</pre>
                         </div>
                         <div>
-                            <h4 class="text-xs font-medium text-gray-700 mb-1">Form Errors</h4>
+                            <h4 class="text-xs font-medium text-muted-foreground mb-1">Form Errors</h4>
                             <pre
-                                class="text-xs bg-white p-2 rounded border overflow-auto max-h-40">{{ JSON.stringify(formErrors, null, 2) }}</pre>
+                                class="text-xs bg-background p-2 rounded border border-border overflow-auto max-h-40">{{ JSON.stringify(formErrors, null, 2) }}</pre>
                         </div>
                     </div>
                 </div>

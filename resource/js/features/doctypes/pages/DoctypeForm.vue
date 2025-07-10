@@ -2,10 +2,10 @@
     <div class="doctype-form">
         <div class="max-w-4xl mx-auto">
             <div class="mb-8">
-                <h1 class="text-2xl font-semibold text-gray-900">
+                <h1 class="text-2xl font-semibold text-foreground">
                     {{ isEditing ? 'Edit DocType' : 'Create DocType' }}
                 </h1>
-                <p class="mt-2 text-sm text-gray-700">
+                <p class="mt-2 text-sm text-muted-foreground">
                     {{ isEditing ? 'Update your doctype configuration' : 'Define a new document type with custom fields'
                     }}
                 </p>
@@ -13,64 +13,64 @@
 
             <form @submit.prevent="submitForm" class="space-y-8">
                 <!-- Basic Information -->
-                <div class="bg-white shadow-sm rounded-lg p-6">
-                    <h2 class="text-lg font-medium text-gray-900 mb-6">Basic Information</h2>
+                <div class="bg-card shadow-sm rounded-lg p-6 border border-border">
+                    <h2 class="text-lg font-medium text-foreground mb-6">Basic Information</h2>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label for="name" class="block text-sm font-medium text-gray-700 mb-2">
-                                Name <span class="text-red-500">*</span>
+                            <label for="name" class="block text-sm font-medium text-foreground mb-2">
+                                Name <span class="text-destructive">*</span>
                             </label>
                             <input id="name" type="text" v-model="formData.name" :disabled="isEditing" required
-                                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                :class="{ 'bg-gray-50 text-gray-500': isEditing }" placeholder="user_profile" />
-                            <p class="mt-1 text-sm text-gray-500">
+                                class="block w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50"
+                                :class="{ 'opacity-50 cursor-not-allowed': isEditing }" placeholder="user_profile" />
+                            <p class="mt-1 text-sm text-muted-foreground">
                                 Unique identifier (letters, numbers, underscores only)
                             </p>
                         </div>
 
                         <div>
-                            <label for="label" class="block text-sm font-medium text-gray-700 mb-2">
-                                Label <span class="text-red-500">*</span>
+                            <label for="label" class="block text-sm font-medium text-foreground mb-2">
+                                Label <span class="text-destructive">*</span>
                             </label>
                             <input id="label" type="text" v-model="formData.label" required
-                                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                class="block w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                                 placeholder="User Profile" />
-                            <p class="mt-1 text-sm text-gray-500">
+                            <p class="mt-1 text-sm text-muted-foreground">
                                 Display name for the doctype
                             </p>
                         </div>
 
                         <div class="md:col-span-2">
-                            <label for="description" class="block text-sm font-medium text-gray-700 mb-2">
+                            <label for="description" class="block text-sm font-medium text-foreground mb-2">
                                 Description
                             </label>
                             <textarea id="description" v-model="formData.description" rows="3"
-                                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                class="block w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                                 placeholder="Brief description of what this doctype represents" />
                         </div>
 
                         <div>
-                            <label for="icon" class="block text-sm font-medium text-gray-700 mb-2">
+                            <label for="icon" class="block text-sm font-medium text-foreground mb-2">
                                 Icon
                             </label>
                             <input id="icon" type="text" v-model="formData.icon"
-                                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                class="block w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                                 placeholder="user" />
-                            <p class="mt-1 text-sm text-gray-500">
+                            <p class="mt-1 text-sm text-muted-foreground">
                                 Icon identifier (e.g., user, document, settings)
                             </p>
                         </div>
 
                         <div>
-                            <label for="color" class="block text-sm font-medium text-gray-700 mb-2">
+                            <label for="color" class="block text-sm font-medium text-foreground mb-2">
                                 Color
                             </label>
                             <div class="flex items-center space-x-2">
                                 <input id="color" type="color" v-model="formData.color"
-                                    class="h-10 w-16 rounded border border-gray-300 cursor-pointer" />
+                                    class="h-10 w-16 rounded border border-input cursor-pointer" />
                                 <input type="text" v-model="formData.color"
-                                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                    class="block w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                                     placeholder="#3b82f6" />
                             </div>
                         </div>
@@ -78,26 +78,28 @@
                         <div class="flex items-center space-x-4">
                             <label class="flex items-center">
                                 <input type="checkbox" v-model="formData.is_active"
-                                    class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" />
-                                <span class="ml-2 text-sm text-gray-700">Active</span>
+                                    class="h-4 w-4 text-primary focus:ring-ring border-input rounded" />
+                                <span class="ml-2 text-sm text-foreground">Active</span>
                             </label>
                         </div>
                     </div>
                 </div>
 
                 <!-- Fields Configuration -->
-                <div class="bg-white shadow-sm rounded-lg p-6">
+                <div class="bg-card shadow-sm rounded-lg p-6 border border-border">
                     <div class="flex items-center justify-between mb-6">
-                        <h2 class="text-lg font-medium text-gray-900">Fields</h2>
+                        <h2 class="text-lg font-medium text-foreground">Fields</h2>
                         <button type="button" @click="addField"
-                            class="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            class="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-primary bg-primary/10 hover:bg-primary/20 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ring">
                             <PlusIcon class="h-4 w-4 mr-2" />
                             Add Field
                         </button>
                     </div>
 
-                    <div v-if="formData.fields.length === 0" class="text-center py-8 text-gray-500">
-                        <DocumentIcon class="mx-auto h-8 w-8 text-gray-400 mb-2" />
+                    <div v-if="formData.fields.length === 0" class="text-center py-8 text-muted-foreground">
+                        <DocumentIcon class="mx-auto h-8 w-8 text-muted-foreground mb-2" />
+                        <p>No fields added yet. Click "Add Field" to start building your form.</p>
+                    </div>
                         <p>No fields defined yet. Click "Add Field" to get started.</p>
                     </div>
 

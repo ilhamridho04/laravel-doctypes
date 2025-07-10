@@ -32,6 +32,140 @@ class DoctypeGeneratorService
         return $results;
     }
 
+    /**
+     * Generate multiple files based on types
+     */
+    public function generateFiles(Doctype $doctype, array $types, bool $force = false): array
+    {
+        $results = [];
+
+        foreach ($types as $type) {
+            try {
+                $result = $this->generateFile($type, $doctype, $force);
+                $results[$type] = $result;
+            } catch (\Exception $e) {
+                $results[$type] = ['error' => $e->getMessage()];
+            }
+        }
+
+        return $results;
+    }
+
+    /**
+     * Get generation preview without creating files
+     */
+    public function getGenerationPreview(Doctype $doctype, string $type): array
+    {
+        $modelName = Str::studly($doctype->name);
+        $fileName = $this->getFileName($type, $modelName);
+        $directory = $this->getOutputDirectory($type);
+
+        return [
+            'path' => $directory . '/' . $fileName,
+            'full_path' => app_path(str_replace('app/', '', $directory)) . '/' . $fileName,
+            'type' => $type,
+            'exists' => file_exists(app_path(str_replace('app/', '', $directory)) . '/' . $fileName)
+        ];
+    }
+
+    /**
+     * Generate a single file with force option
+     */
+    protected function generateFile(string $type, Doctype $doctype, bool $force = false): array
+    {
+        if (!isset($this->stubs[$type])) {
+            throw new \Exception("Unknown generation type: {$type}");
+        }
+
+        $modelName = Str::studly($doctype->name);
+        $fileName = $this->getFileName($type, $modelName);
+        $directory = $this->getOutputDirectory($type);
+        $fullPath = app_path(str_replace('app/', '', $directory)) . '/' . $fileName;
+
+        // Check if file exists and force is not set
+        if (file_exists($fullPath) && !$force) {
+            throw new \Exception("File already exists: {$fullPath}. Use --force to overwrite.");
+        }
+
+        // Create directory if it doesn't exist
+        if (!File::exists(dirname($fullPath))) {
+            File::makeDirectory(dirname($fullPath), 0755, true);
+        }
+
+        // Generate content
+        $content = $this->generateFileContent($type, $doctype);
+
+        // Write file
+        File::put($fullPath, $content);
+
+        return [
+            'path' => $directory . '/' . $fileName,
+            'full_path' => $fullPath,
+            'type' => $type
+        ];
+    }
+
+    /**
+     * Get file name for type
+     */
+    protected function getFileName(string $type, string $modelName): string
+    {
+        switch ($type) {
+            case 'model':
+                return $modelName . '.php';
+            case 'controller':
+                return $modelName . 'Controller.php';
+            case 'request':
+                return $modelName . 'Request.php';
+            case 'resource':
+                return $modelName . 'Resource.php';
+            case 'migration':
+                $timestamp = date('Y_m_d_His');
+                $tableName = Str::snake(Str::plural($modelName));
+                return "{$timestamp}_create_{$tableName}_table.php";
+            default:
+                return $modelName . '.php';
+        }
+    }
+
+    /**
+     * Get output directory for type
+     */
+    protected function getOutputDirectory(string $type): string
+    {
+        switch ($type) {
+            case 'model':
+                return 'app/Models';
+            case 'controller':
+                return 'app/Http/Controllers';
+            case 'request':
+                return 'app/Http/Requests';
+            case 'resource':
+                return 'app/Http/Resources';
+            case 'migration':
+                return 'database/migrations';
+            default:
+                return 'app';
+        }
+    }
+
+    /**
+     * Generate file content
+     */
+    protected function generateFileContent(string $type, Doctype $doctype): string
+    {
+        $stubPath = __DIR__ . '/../stubs/' . $this->stubs[$type];
+
+        if (!File::exists($stubPath)) {
+            throw new \Exception("Stub file not found: {$stubPath}");
+        }
+
+        $content = File::get($stubPath);
+        $replacements = $this->getReplacements($type, $doctype);
+
+        return str_replace(array_keys($replacements), array_values($replacements), $content);
+    }
+
     public function generateFile(string $type, Doctype $doctype): string
     {
         $stubPath = __DIR__ . '/../stubs/' . $this->stubs[$type];

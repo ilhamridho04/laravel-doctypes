@@ -81,12 +81,25 @@ All documentation is available in the `docs/` folder:
    ]);
    ```
 
+> **Need code generation help?** Check [GENERATOR_GUIDE.md](GENERATOR_GUIDE.md) for complete generator usage guide.
 > **Need frontend setup help?** Check [FRONTEND_SETUP.md](FRONTEND_SETUP.md) for Vue.js components guide.
 > **Having installation issues?** Check [QUICK_FIX.md](QUICK_FIX.md) or [INSTALLATION_CHECK.md](INSTALLATION_CHECK.md) for solutions.
 
-4. **Generate the model**:
+7. **Generate Laravel files**:
    ```bash
-   php artisan doctype:generate Customer
+   # Generate all files (Model, Controller, Request, Resource, Migration)
+   php artisan doctype:generate Customer --all
+   
+   # Or generate specific files
+   php artisan doctype:generate Customer --controller --model
+   ```
+
+8. **Run migrations and add routes**:
+   ```bash
+   php artisan migrate
+   
+   # Add to routes/api.php
+   Route::apiResource('customers', CustomerController::class);
    ```
 
 ## 🛠️ Requirements

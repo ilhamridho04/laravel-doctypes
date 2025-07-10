@@ -15,6 +15,7 @@ Welcome to the DocTypes package documentation! Here you'll find everything you n
 - **[Troubleshooting](TROUBLESHOOTING.md)** - Common issues and solutions
 - **[Service Provider Guide](../SERVICE_PROVIDER.md)** - Service provider registration guide
 - **[Frontend Setup](../FRONTEND_SETUP.md)** - Vue.js components setup guide
+- **[Code Generator](../GENERATOR_GUIDE.md)** - Generate Laravel files from DocTypes
 
 ## 🚀 Quick Navigation
 
