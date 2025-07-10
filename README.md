@@ -147,6 +147,17 @@ await generateDoctypeFiles('product', {
 
 📖 **[Complete Form Schema Guide →](FORM_SCHEMA_GUIDE.md)**
 
+## 🔧 Recent Updates & Fixes
+
+**Latest Version Improvements:**
+- ✅ **DoctypeForm.vue** - Fixed template syntax error and improved UI consistency
+- ✅ **Unified Styling** - All components now use consistent shadcn-vue + Tailwind v4 patterns
+- ✅ **Clean Architecture** - Removed deprecated code and improved component structure
+- ✅ **Better UX** - Enhanced form layouts, buttons, and user interaction patterns
+- ✅ **Component Guide** - Added comprehensive [COMPONENT_GUIDE.md](COMPONENT_GUIDE.md) for developers
+
+> **Migration from older versions**: If you're updating from a previous version, re-publish the frontend components to get the latest fixes: `php artisan vendor:publish --tag="doctypes-views" --force`
+
 ## 🛠️ Requirements
 
 - PHP 8.1+
