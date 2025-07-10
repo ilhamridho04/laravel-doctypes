@@ -27,17 +27,36 @@ All documentation is available in the `docs/` folder:
 
 ## 🏃‍♂️ Quick Start
 
-1. **Install the package**:
-   ```bash
-   composer require ngodingskuyy/doctypes
+**📍 Important: Run these commands in your Laravel project directory, not in the package directory!**
+
+1. **Setup package repository in your Laravel project**:
+   
+   Add to your Laravel project's `composer.json`:
+   ```json
+   {
+       "repositories": [
+           {
+               "type": "path",
+               "url": "./packages/doctypes"
+           }
+       ],
+       "require": {
+           "ngodingskuyy/doctypes": "dev-main"
+       }
+   }
    ```
 
-2. **Install and configure**:
+2. **Install the package**:
+   ```bash
+   composer install
+   ```
+
+3. **Install and configure**:
    ```bash
    php artisan doctype:install
    ```
 
-3. **Create your first doctype**:
+4. **Create your first doctype**:
    ```php
    $doctype = Doctype::create([
        'name' => 'Customer',
@@ -49,7 +68,7 @@ All documentation is available in the `docs/` folder:
    ]);
    ```
 
-> **Having installation issues?** Check [QUICK_FIX.md](QUICK_FIX.md) for common solutions.
+> **Having installation issues?** Check [QUICK_FIX.md](QUICK_FIX.md) or [INSTALLATION_CHECK.md](INSTALLATION_CHECK.md) for solutions.
 
 4. **Generate the model**:
    ```bash

@@ -63,7 +63,84 @@ php artisan config:clear
 php artisan cache:clear
 ```
 
-## 🚀 Installation Commands
+## � Step-by-Step Debugging
+
+If the service provider is still not recognized, follow these debugging steps:
+
+### Step 1: Verify Package Installation
+
+Check if the package is properly installed in your Laravel project:
+
+```bash
+# In your Laravel project root
+composer show ngodingskuyy/doctypes
+```
+
+### Step 2: Check Auto-discovery
+
+Verify Laravel can see the package's service providers:
+
+```bash
+# In your Laravel project
+php artisan package:discover
+```
+
+### Step 3: Check Composer Installed Packages
+
+Look for your package in the installed packages file:
+
+```bash
+# Check if package is in vendor/composer/installed.json
+cat vendor/composer/installed.json | grep -A 5 -B 5 "ngodingskuyy/doctypes"
+```
+
+### Step 4: Manual Service Provider Registration
+
+If auto-discovery fails, manually add to `config/app.php`:
+
+```php
+<?php
+
+return [
+    // ... other configuration
+
+    'providers' => [
+        /*
+         * Laravel Framework Service Providers...
+         */
+        Illuminate\Auth\AuthServiceProvider::class,
+        Illuminate\Broadcasting\BroadcastServiceProvider::class,
+        // ... other Laravel providers
+
+        /*
+         * Package Service Providers...
+         */
+        Doctypes\Providers\DoctypeServiceProvider::class,
+
+        /*
+         * Application Service Providers...
+         */
+        App\Providers\AppServiceProvider::class,
+        // ... your application providers
+    ],
+
+    // ... rest of configuration
+];
+```
+
+### Step 5: Force Clear Everything
+
+```bash
+# Clear all possible caches
+php artisan config:clear
+php artisan cache:clear
+php artisan route:clear
+php artisan view:clear
+php artisan event:clear
+composer dump-autoload --optimize
+```
+
+## �🚀 Installation Commands
 
 After the service provider is registered (automatically or manually), run:
 
