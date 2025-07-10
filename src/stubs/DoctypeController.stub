@@ -1,0 +1,68 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Controllers\Controller;
+use App\Models\{{modelName}};
+use App\Http\Requests\{{requestName}};
+use App\Http\Resources\{{resourceName}};
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+
+class {{controllerName}} extends Controller
+{
+    public function index(Request $request): JsonResponse
+    {
+        $query = {{modelName}}::query();
+
+        {{filterLogic}}
+
+        ${{modelVariable}} = $query->paginate($request->get('per_page', 15));
+
+        return response()->json([
+            'data' => {{resourceName}}::collection(${{modelVariable}}->items()),
+            'meta' => [
+                'current_page' => ${{modelVariable}}->currentPage(),
+                'last_page' => ${{modelVariable}}->lastPage(),
+                'per_page' => ${{modelVariable}}->perPage(),
+                'total' => ${{modelVariable}}->total(),
+            ]
+        ]);
+    }
+
+    public function store({{requestName}} $request): JsonResponse
+    {
+        ${{modelVariable}} = {{modelName}}::create($request->validated());
+
+        return response()->json([
+            'message' => '{{modelName}} created successfully',
+            'data' => new {{resourceName}}(${{modelVariable}})
+        ], 201);
+    }
+
+    public function show({{modelName}} ${{modelVariable}}): JsonResponse
+    {
+        return response()->json([
+            'data' => new {{resourceName}}(${{modelVariable}})
+        ]);
+    }
+
+    public function update({{requestName}} $request, {{modelName}} ${{modelVariable}}): JsonResponse
+    {
+        ${{modelVariable}}->update($request->validated());
+
+        return response()->json([
+            'message' => '{{modelName}} updated successfully',
+            'data' => new {{resourceName}}(${{modelVariable}})
+        ]);
+    }
+
+    public function destroy({{modelName}} ${{modelVariable}}): JsonResponse
+    {
+        ${{modelVariable}}->delete();
+
+        return response()->json([
+            'message' => '{{modelName}} deleted successfully'
+        ]);
+    }
+}
