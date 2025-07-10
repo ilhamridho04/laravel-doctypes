@@ -21,11 +21,23 @@ class InstallDoctypeCommand extends Command
             '--force' => true
         ]);
 
+        // Publish migrations
+        $this->info('Publishing migrations...');
+        Artisan::call('vendor:publish', [
+            '--tag' => 'doctypes-migrations',
+            '--force' => true
+        ]);
+
+        // Publish frontend components
+        $this->info('Publishing frontend components...');
+        Artisan::call('vendor:publish', [
+            '--tag' => 'doctypes-views',
+            '--force' => true
+        ]);
+
         // Run migrations
         $this->info('Running migrations...');
-        Artisan::call('migrate', [
-            '--path' => 'vendor/ngodingskuyy/doctypes/database/migrations'
-        ]);
+        Artisan::call('migrate');
 
         // Seed data if requested
         if ($this->option('seed')) {
@@ -42,9 +54,12 @@ class InstallDoctypeCommand extends Command
         $this->info('DocType package installed successfully!');
         $this->line('');
         $this->line('Next steps:');
-        $this->line('1. Add API routes to your routes/api.php if needed');
-        $this->line('2. Configure the frontend components in your Vue.js application');
-        $this->line('3. Check the example.html file for usage examples');
+        $this->line('1. Check resources/js/features/doctypes/ for Vue.js components');
+        $this->line('2. Import components in your Vue.js application');
+        $this->line('3. Configure API routes if needed');
+        $this->line('4. Check the example.html file for usage examples');
+        $this->line('');
+        $this->line('Frontend components published to: resources/js/features/doctypes/');
 
         return 0;
     }
