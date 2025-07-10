@@ -144,47 +144,62 @@
                     </button>
                 </div>
 
-                <div v-else class="space-y-4">
+                <div v-else class="space-y-6">
                     <div v-for="(field, index) in formData.fields" :key="field.fieldname || index"
-                        class="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-sm font-medium text-gray-900">
+                        class="bg-muted/50 rounded-lg border border-border p-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-lg font-medium text-foreground">
                                 Field {{ index + 1 }}: {{ field.label || 'Untitled Field' }}
                             </h3>
-                            <button type="button" @click="removeField(index)" class="text-red-600 hover:text-red-500"
-                                title="Remove field">
+                            <button 
+                                type="button" 
+                                @click="removeField(index)" 
+                                class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-8 w-8 text-destructive hover:text-destructive"
+                                title="Remove field"
+                            >
                                 <TrashIcon class="h-4 w-4" />
                             </button>
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            <div>
-                                <label :for="`field-${index}-name`"
-                                    class="block text-sm font-medium text-gray-700 mb-1">
-                                    Field Name <span class="text-red-500">*</span>
+                            <div class="space-y-2">
+                                <label :for="`field-${index}-name`" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                                    Field Name <span class="text-destructive">*</span>
                                 </label>
-                                <input :id="`field-${index}-name`" type="text" v-model="field.fieldname" required
-                                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                    placeholder="first_name" />
+                                <input 
+                                    :id="`field-${index}-name`" 
+                                    type="text" 
+                                    v-model="field.fieldname" 
+                                    required
+                                    class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                    placeholder="first_name" 
+                                />
                             </div>
 
-                            <div>
-                                <label :for="`field-${index}-label`"
-                                    class="block text-sm font-medium text-gray-700 mb-1">
-                                    Label <span class="text-red-500">*</span>
+                            <div class="space-y-2">
+                                <label :for="`field-${index}-label`" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                                    Label <span class="text-destructive">*</span>
                                 </label>
-                                <input :id="`field-${index}-label`" type="text" v-model="field.label" required
-                                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                    placeholder="First Name" />
+                                <input 
+                                    :id="`field-${index}-label`" 
+                                    type="text" 
+                                    v-model="field.label" 
+                                    required
+                                    class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                    placeholder="First Name" 
+                                />
                             </div>
 
-                            <div>
-                                <label :for="`field-${index}-type`"
-                                    class="block text-sm font-medium text-gray-700 mb-1">
-                                    Field Type <span class="text-red-500">*</span>
+                            <div class="space-y-2">
+                                <label :for="`field-${index}-type`" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                                    Field Type <span class="text-destructive">*</span>
                                 </label>
-                                <select :id="`field-${index}-type`" v-model="field.fieldtype" required
-                                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                <select 
+                                    :id="`field-${index}-type`" 
+                                    v-model="field.fieldtype" 
+                                    required
+                                    class="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                >
                                     <option value="">Select type</option>
                                     <option value="text">Text</option>
                                     <option value="textarea">Textarea</option>
@@ -202,194 +217,234 @@
                                 </select>
                             </div>
 
-                            <div class="md:col-span-2 lg:col-span-3">
-                                <label :for="`field-${index}-description`"
-                                    class="block text-sm font-medium text-gray-700 mb-1">
+                            <div class="md:col-span-2 lg:col-span-3 space-y-2">
+                                <label :for="`field-${index}-description`" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                                     Description
                                 </label>
-                                <input :id="`field-${index}-description`" type="text" v-model="field.description"
-                                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                    placeholder="Brief description of this field" />
+                                <input 
+                                    :id="`field-${index}-description`" 
+                                    type="text" 
+                                    v-model="field.description"
+                                    class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                    placeholder="Brief description of this field" 
+                                />
                             </div>
 
                             <!-- Select Options -->
-                            <div v-if="field.fieldtype === 'select'" class="md:col-span-2 lg:col-span-3">
-                                <label class="block text-sm font-medium text-gray-700 mb-1">
+                            <div v-if="field.fieldtype === 'select'" class="md:col-span-2 lg:col-span-3 space-y-2">
+                                <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                                     Select Options
                                 </label>
-                                <div class="space-y-2">
+                                <div class="space-y-3">
                                     <div v-for="(option, optIndex) in getSelectOptions(field)" :key="optIndex"
                                         class="flex items-center space-x-2">
-                                        <input type="text" v-model="getSelectOptions(field)[optIndex]"
-                                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                            placeholder="Option value" />
-                                        <button type="button" @click="removeSelectOption(field, optIndex)"
-                                            class="text-red-600 hover:text-red-500">
+                                        <input 
+                                            type="text" 
+                                            v-model="getSelectOptions(field)[optIndex]"
+                                            class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                            placeholder="Option value" 
+                                        />
+                                        <button 
+                                            type="button" 
+                                            @click="removeSelectOption(field, optIndex)"
+                                            class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-8 w-8 text-destructive hover:text-destructive"
+                                        >
                                             <TrashIcon class="h-4 w-4" />
                                         </button>
                                     </div>
-                                    <button type="button" @click="addSelectOption(field)"
-                                        class="text-indigo-600 hover:text-indigo-500 text-sm">
-                                        + Add Option
+                                    <button 
+                                        type="button" 
+                                        @click="addSelectOption(field)"
+                                        class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-3"
+                                    >
+                                        <PlusIcon class="w-4 h-4 mr-2" />
+                                        Add Option
                                     </button>
                                 </div>
                             </div>
 
                             <!-- Field Options -->
-                            <div class="flex items-center space-x-4 md:col-span-2 lg:col-span-3">
-                                <label class="flex items-center">
-                                    <input type="checkbox" v-model="field.required"
-                                        class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" />
-                                    <span class="ml-2 text-sm text-gray-700">Required</span>
-                                </label>
-                                <label class="flex items-center">
-                                    <input type="checkbox" v-model="field.unique"
-                                        class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" />
-                                    <span class="ml-2 text-sm text-gray-700">Unique</span>
-                                </label>
-                                <label class="flex items-center">
-                                    <input type="checkbox" v-model="field.in_list_view"
-                                        class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" />
-                                    <span class="ml-2 text-sm text-gray-700">Show in List</span>
-                                </label>
-                                <label class="flex items-center">
-                                    <input type="checkbox" v-model="field.in_standard_filter"
-                                        class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" />
-                                    <span class="ml-2 text-sm text-gray-700">Filterable</span>
-                                </label>
+                            <div class="flex flex-wrap gap-4 md:col-span-2 lg:col-span-3">
+                                <div class="flex items-center space-x-2">
+                                    <input 
+                                        :id="`field-${index}-required`"
+                                        type="checkbox" 
+                                        v-model="field.required"
+                                        class="h-4 w-4 rounded border border-input text-primary focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                                    />
+                                    <label :for="`field-${index}-required`" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                                        Required
+                                    </label>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <input 
+                                        :id="`field-${index}-unique`"
+                                        type="checkbox" 
+                                        v-model="field.unique"
+                                        class="h-4 w-4 rounded border border-input text-primary focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                                    />
+                                    <label :for="`field-${index}-unique`" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                                        Unique
+                                    </label>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <input 
+                                        :id="`field-${index}-list`"
+                                        type="checkbox" 
+                                        v-model="field.in_list_view"
+                                        class="h-4 w-4 rounded border border-input text-primary focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                                    />
+                                    <label :for="`field-${index}-list`" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                                        Show in List
+                                    </label>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <input 
+                                        :id="`field-${index}-filter`"
+                                        type="checkbox" 
+                                        v-model="field.in_standard_filter"
+                                        class="h-4 w-4 rounded border border-input text-primary focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                                    />
+                                    <label :for="`field-${index}-filter`" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                                        Filterable
+                                    </label>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-        </div>
+            </div>
 
-        <!-- Form Actions -->
-        <div class="flex items-center justify-end space-x-4">
-            <button type="button" @click="$emit('cancel')"
-                class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                Cancel
-            </button>
-            <button type="submit" :disabled="loading"
-                class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50">
-                {{ loading ? 'Saving...' : (isEditing ? 'Update DocType' : 'Create DocType') }}
-            </button>
-        </div>
+            <!-- Form Actions -->
+            <div class="flex items-center justify-end space-x-3 pt-6">
+                <button 
+                    type="button" 
+                    @click="$emit('cancel')"
+                    class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
+                >
+                    Cancel
+                </button>
+                <button 
+                    type="submit" 
+                    :disabled="loading"
+                    class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
+                >
+                    {{ loading ? 'Saving...' : (isEditing ? 'Update DocType' : 'Create DocType') }}
+                </button>
+            </div>
         </form>
-    </div>
     </div>
 </template>
 
 <script setup lang="ts">
-    import { ref, computed, onMounted } from 'vue';
-    import { useDoctypes } from '../services/useDoctypes';
-    import type { Doctype, DoctypeField } from '../types/doctype';
-    import { PlusIcon, TrashIcon, DocumentIcon } from '@heroicons/vue/24/outline';
+import { ref, computed, onMounted } from 'vue';
+import { useDoctypes } from '../services/useDoctypes';
+import type { Doctype, DoctypeField } from '../types/doctype';
+import { PlusIcon, TrashIcon, DocumentIcon } from '@heroicons/vue/24/outline';
 
-    interface Props {
-        doctype?: Doctype;
-    }
+interface Props {
+    doctype?: Doctype;
+}
 
-    interface Emits {
-        (event: 'saved', doctype: Doctype): void;
-        (event: 'cancel'): void;
-    }
+interface Emits {
+    (event: 'saved', doctype: Doctype): void;
+    (event: 'cancel'): void;
+}
 
-    const props = defineProps<Props>();
-    const emit = defineEmits<Emits>();
+const props = defineProps<Props>();
+const emit = defineEmits<Emits>();
 
-    const { createDoctype, updateDoctype, loading } = useDoctypes();
+const { createDoctype, updateDoctype, loading } = useDoctypes();
 
-    const isEditing = computed(() => !!props.doctype?.id);
+const isEditing = computed(() => !!props.doctype?.id);
 
-    const formData = ref<{
-        name: string;
-        label: string;
-        description: string;
-        icon: string;
-        color: string;
-        is_active: boolean;
-        fields: DoctypeField[];
-    }>({
-        name: '',
+const formData = ref<{
+    name: string;
+    label: string;
+    description: string;
+    icon: string;
+    color: string;
+    is_active: boolean;
+    fields: DoctypeField[];
+}>({
+    name: '',
+    label: '',
+    description: '',
+    icon: '',
+    color: '#3b82f6',
+    is_active: true,
+    fields: [],
+});
+
+const addField = () => {
+    formData.value.fields.push({
+        fieldname: '',
         label: '',
+        fieldtype: 'text',
+        required: false,
+        unique: false,
+        in_list_view: false,
+        in_standard_filter: false,
         description: '',
-        icon: '',
-        color: '#3b82f6',
-        is_active: true,
-        fields: [],
+        sort_order: formData.value.fields.length,
     });
+};
 
-    const addField = () => {
-        formData.value.fields.push({
-            fieldname: '',
-            label: '',
-            fieldtype: 'text',
-            required: false,
-            unique: false,
-            in_list_view: false,
-            in_standard_filter: false,
-            description: '',
-            sort_order: formData.value.fields.length,
-        });
-    };
-
-    const removeField = (index: number) => {
-        formData.value.fields.splice(index, 1);
-    };
-
-    const getSelectOptions = (field: DoctypeField): string[] => {
-        if (!field.options) {
-            field.options = { options: [] };
-        }
-        if (!field.options.options) {
-            field.options.options = [];
-        }
-        return field.options.options as string[];
-    };
-
-    const addSelectOption = (field: DoctypeField) => {
-        const options = getSelectOptions(field);
-        options.push('');
-    };
-
-    const removeSelectOption = (field: DoctypeField, index: number) => {
-        const options = getSelectOptions(field);
-        options.splice(index, 1);
-    };
-
-    const submitForm = async () => {
-        try {
-            let result: Doctype;
-
-            if (isEditing.value && props.doctype?.id) {
-                result = await updateDoctype(props.doctype.id, formData.value);
-            } else {
-                result = await createDoctype(formData.value);
-            }
-
-            emit('saved', result);
-        } catch (error) {
-            console.error('Failed to save doctype:', error);
-        }
-    };
-
-    onMounted(() => {
-        if (props.doctype) {
-            formData.value = {
-                name: props.doctype.name,
-                label: props.doctype.label,
-                description: props.doctype.description || '',
-                icon: props.doctype.icon || '',
-                color: props.doctype.color || '#3b82f6',
-                is_active: props.doctype.is_active ?? true,
-                fields: props.doctype.fields || [],
-            };
-        }
+const removeField = (index: number) => {
+    formData.value.fields.splice(index, 1);
+    // Update sort_order for remaining fields
+    formData.value.fields.forEach((field, idx) => {
+        field.sort_order = idx;
     });
-</script>
+};
 
-<style scoped>
-    .doctype-form {
-        padding: 1rem;
+const getSelectOptions = (field: DoctypeField): string[] => {
+    if (!field.options) {
+        field.options = { options: [] };
     }
-</style>
+    if (!field.options.options) {
+        field.options.options = [];
+    }
+    return field.options.options as string[];
+};
+
+const addSelectOption = (field: DoctypeField) => {
+    const options = getSelectOptions(field);
+    options.push('');
+};
+
+const removeSelectOption = (field: DoctypeField, index: number) => {
+    const options = getSelectOptions(field);
+    options.splice(index, 1);
+};
+
+const submitForm = async () => {
+    try {
+        let result: Doctype;
+
+        if (isEditing.value && props.doctype?.id) {
+            result = await updateDoctype(props.doctype.id, formData.value);
+        } else {
+            result = await createDoctype(formData.value);
+        }
+
+        emit('saved', result);
+    } catch (error) {
+        console.error('Failed to save doctype:', error);
+    }
+};
+
+onMounted(() => {
+    if (props.doctype) {
+        formData.value = {
+            name: props.doctype.name,
+            label: props.doctype.label,
+            description: props.doctype.description || '',
+            icon: props.doctype.icon || '',
+            color: props.doctype.color || '#3b82f6',
+            is_active: props.doctype.is_active ?? true,
+            fields: props.doctype.fields || [],
+        };
+    }
+});
+</script>
