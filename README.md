@@ -56,7 +56,20 @@ All documentation is available in the `docs/` folder:
    php artisan doctype:install
    ```
 
-4. **Create your first doctype**:
+4. **Publish frontend components** (if not auto-published):
+   ```bash
+   php artisan vendor:publish --tag="doctypes-views" --force
+   ```
+   
+   > **Note**: If you see duplicate path like `resources/js/features/doctypes/features/doctypes/`, check [FIX_FRONTEND_PATH.md](FIX_FRONTEND_PATH.md) for the solution.
+
+5. **Import in your Vue app**:
+   ```javascript
+   import { useDoctypes } from '@/features/doctypes/services/useDoctypes'
+   import DoctypeList from '@/features/doctypes/pages/DoctypeList.vue'
+   ```
+
+6. **Create your first doctype**:
    ```php
    $doctype = Doctype::create([
        'name' => 'Customer',
@@ -68,6 +81,7 @@ All documentation is available in the `docs/` folder:
    ]);
    ```
 
+> **Need frontend setup help?** Check [FRONTEND_SETUP.md](FRONTEND_SETUP.md) for Vue.js components guide.
 > **Having installation issues?** Check [QUICK_FIX.md](QUICK_FIX.md) or [INSTALLATION_CHECK.md](INSTALLATION_CHECK.md) for solutions.
 
 4. **Generate the model**:

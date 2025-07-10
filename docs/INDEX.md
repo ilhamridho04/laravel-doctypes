@@ -14,6 +14,7 @@ Welcome to the DocTypes package documentation! Here you'll find everything you n
 - **[Field Types](FIELD_TYPES.md)** - All supported field types and configurations
 - **[Troubleshooting](TROUBLESHOOTING.md)** - Common issues and solutions
 - **[Service Provider Guide](../SERVICE_PROVIDER.md)** - Service provider registration guide
+- **[Frontend Setup](../FRONTEND_SETUP.md)** - Vue.js components setup guide
 
 ## 🚀 Quick Navigation
 

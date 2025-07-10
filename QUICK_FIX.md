@@ -102,8 +102,28 @@ php artisan doctype:install
 
 This will:
 - Publish the configuration file
+- Publish the database migrations  
+- Publish the frontend components
 - Run the database migrations
 - Seed sample data (if requested)
+
+## Step 7: Verify Frontend Components
+
+Check if the frontend components were published:
+
+```bash
+# Check if directory exists
+ls -la resources/js/features/doctypes/
+
+# Or on Windows
+dir resources\js\features\doctypes\
+```
+
+If the directory doesn't exist, manually publish frontend assets:
+
+```bash
+php artisan vendor:publish --tag="doctypes-views" --force
+```
 
 ## Alternative: Symlink Installation
 

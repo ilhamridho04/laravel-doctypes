@@ -52,7 +52,7 @@ class DoctypeServiceProvider extends ServiceProvider
 
             // Publish views
             $this->publishes([
-                __DIR__ . '/../../resource/js' => $this->app->resourcePath('js/features/doctypes'),
+                __DIR__ . '/../../resource/js/features/doctypes' => $this->app->resourcePath('js/features/doctypes'),
             ], 'doctypes-views');
         }
     }
