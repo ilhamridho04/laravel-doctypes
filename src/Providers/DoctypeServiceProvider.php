@@ -36,14 +36,33 @@ class DoctypeServiceProvider extends ServiceProvider
             __DIR__ . '/../../config/doctypes.php' => config_path('doctypes.php'),
         ], 'doctypes-config');
 
-        // Publish Vue files
+        // Publish Vue components (legacy structure)
         $this->publishes([
             __DIR__ . '/../../resources/js' => resource_path('js/doctypes'),
         ], 'doctypes-vue');
+
+        // Publish Vue components (new feature structure)
+        $this->publishes([
+            __DIR__ . '/../../resource/js/features/doctypes' => resource_path('js/features/doctypes'),
+        ], 'doctypes-vue-features');
+
+        // Publish all Vue files together
+        $this->publishes([
+            __DIR__ . '/../../resources/js' => resource_path('js/doctypes'),
+            __DIR__ . '/../../resource/js/features/doctypes' => resource_path('js/features/doctypes'),
+        ], 'doctypes-frontend');
 
         // Publish migrations
         $this->publishes([
             __DIR__ . '/../../database/migrations/' => database_path('migrations'),
         ], 'doctypes-migrations');
+
+        // Publish all assets
+        $this->publishes([
+            __DIR__ . '/../../config/doctypes.php' => config_path('doctypes.php'),
+            __DIR__ . '/../../resources/js' => resource_path('js/doctypes'),
+            __DIR__ . '/../../resource/js/features/doctypes' => resource_path('js/features/doctypes'),
+            __DIR__ . '/../../database/migrations/' => database_path('migrations'),
+        ], 'doctypes-all');
     }
 }
