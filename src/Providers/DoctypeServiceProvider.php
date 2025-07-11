@@ -1,12 +1,12 @@
 <?php
 
-namespace NgodingSkuyy\Doctypes\Providers;
+namespace Ngodingskuyy\Doctypes\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use NgodingSkuyy\Doctypes\Console\Commands\InstallDoctypeCommand;
-use NgodingSkuyy\Doctypes\Console\Commands\GenerateDoctypeCommand;
-use NgodingSkuyy\Doctypes\Services\DoctypeService;
-use NgodingSkuyy\Doctypes\Services\DoctypeGeneratorService;
+use Ngodingskuyy\Doctypes\Console\Commands\InstallDoctypeCommand;
+use Ngodingskuyy\Doctypes\Console\Commands\GenerateDoctypeCommand;
+use Ngodingskuyy\Doctypes\Services\DoctypeService;
+use Ngodingskuyy\Doctypes\Services\DoctypeGeneratorService;
 
 class DoctypeServiceProvider extends ServiceProvider
 {
