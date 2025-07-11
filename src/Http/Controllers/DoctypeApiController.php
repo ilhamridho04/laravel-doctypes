@@ -10,7 +10,7 @@ use Ngodingskuyy\Doctypes\Http\Resources\DoctypeResource;
 use Ngodingskuyy\Doctypes\Models\Doctype;
 use Ngodingskuyy\Doctypes\Services\DoctypeService;
 
-class DoctypeController extends Controller
+class DoctypeApiController extends Controller
 {
     public function __construct(
         private DoctypeService $doctypeService

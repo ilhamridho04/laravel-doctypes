@@ -1,8 +1,8 @@
 <?php
 
-namespace Doctypes\Http\Controllers;
+namespace Ngodingskuyy\Doctypes\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;

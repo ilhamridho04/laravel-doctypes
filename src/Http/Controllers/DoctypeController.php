@@ -1,11 +1,11 @@
 <?php
 
-namespace Doctypes\Http\Controllers;
+namespace Ngodingskuyy\Doctypes\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use Doctypes\Http\Requests\DoctypeRequest;
-use Doctypes\Http\Resources\DoctypeResource;
-use Doctypes\Models\Doctype;
+use Illuminate\Routing\Controller;
+use Ngodingskuyy\Doctypes\Http\Requests\DoctypeRequest;
+use Ngodingskuyy\Doctypes\Http\Resources\DoctypeResource;
+use Ngodingskuyy\Doctypes\Models\Doctype;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
@@ -151,7 +151,7 @@ class DoctypeController extends Controller
         $types = $request->get('types', ['model', 'controller', 'request', 'resource', 'migration']);
         $force = $request->boolean('force', false);
 
-        $generatorService = app(\Doctypes\Services\DoctypeGeneratorService::class);
+        $generatorService = app(\Ngodingskuyy\Doctypes\Services\DoctypeGeneratorService::class);
 
         if ($request->boolean('preview', false)) {
             $results = [];
