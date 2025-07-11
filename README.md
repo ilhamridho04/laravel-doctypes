@@ -1,225 +1,361 @@
-# Laravel Doctypes Package
+# NgodingSkuyy DocTypes 🚀
 
-![Laravel](https://img.shields.io/badge/Laravel-10.x%2B-red)
-![PHP](https://img.shields.io/badge/PHP-8.1%2B-blue)
-![Vue](https://img.shields.io/badge/Vue.js-3.x-green)
-![License](https://img.shields.io/badge/License-MIT-yellow)
+**Dynamic DocType system for Laravel 12 + Vue 3 + Tailwind v4 + shadcn-vue**
 
-A dynamic DocType system for Laravel, inspired by Frappe Framework. Create dynamic forms, models, and APIs with JSON-based field definitions.
+A comprehensive package that brings Frappe-like DocType functionality to Laravel applications, featuring dynamic field management, form generation, and stub-based code generation.
 
-## 🚀 Features
+## ✨ Features
 
-- 🔧 **Dynamic Generator** - Create models, controllers, migrations automatically via artisan commands
-- 📝 **Dynamic Forms** - Generate Vue forms from JSON schema with full field metadata support
-- 🎯 **Field Types** - Text, textarea, number, email, select, checkbox, date, datetime, time, file, image, JSON
-- � **API CRUD** - Full REST API for doctype management with Laravel Resource responses
-- 🎨 **Vue 3 + Tailwind v4** - Modern frontend components compatible with shadcn-vue
-- 📊 **JSON Metadata** - Store complex field configurations and validation rules in JSON
+🎯 **Dynamic Field Management**
+- Create and manage field types through UI
+- Support for 13+ field types (text, select, checkbox, date, file, etc.)
+- Real-time form schema generation
+- JSON metadata storage in database
 
-## ⚡ Quick Start
+🔧 **Code Generation**  
+- Stub-based Laravel file generation (Model, Controller, Request, Resource, Migration)
+- Artisan commands for rapid prototyping
+- Dynamic model creation with proper relationships
+
+🎨 **Modern Frontend**
+- Vue 3 with Composition API and `<script setup>`
+- TypeScript support with comprehensive type definitions
+- Tailwind v4 and shadcn-vue components
+- Responsive and accessible UI
+
+📊 **Complete CRUD System**
+- RESTful API with Laravel resources
+- Dynamic model controllers for generated entities
+- Pagination, filtering, and search
+- Form validation and error handling
+
+## 🚀 Quick Start
+
+### Installation
 
 ```bash
-# Install
+# Install the package
 composer require ngodingskuyy/doctypes
+
+# Publish assets and config
 php artisan vendor:publish --provider="NgodingSkuyy\Doctypes\Providers\DoctypeServiceProvider"
-php artisan migrate
-
-# See demo and examples
-php artisan doctype:demo
-
-# Create sample doctypes  
-php artisan db:seed --class="NgodingSkuyy\Doctypes\Database\Seeders\ExampleDoctypeSeeder"
-
-# Generate files
-php artisan doctype:generate Customer
-php artisan doctype:generate Product
 
 # Run migrations
 php artisan migrate
+
+# Seed demo data
+php artisan doctype:demo
+```
+
+### Create Your First DocType
+
+1. **Via UI**: Navigate to `/doctypes/create` and build your DocType visually
+2. **Via Code**: Use the demo command to see examples
+
+```bash
+# See comprehensive examples
+php artisan doctype:demo
+
+# Generate Laravel files from DocType  
+php artisan doctype:demo --generate
+```
+
+### Frontend Setup
+
+```vue
+<!-- In your Vue app -->
+<template>
+  <div>
+    <!-- List all doctypes -->
+    <DoctypeList />
+    
+    <!-- Create/edit doctype with fields -->
+    <DoctypeForm />
+    
+    <!-- Render dynamic form from schema -->
+    <GeneratedForm doctype-name="Customer" @submit="handleSubmit" />
+  </div>
+</template>
+
+<script setup>
+import { DoctypeList, DoctypeForm, GeneratedForm } from '@/features/doctypes';
+</script>
+```
+
+## 📋 Field Types Supported
+
+| Type | Description | Example |
+|------|-------------|---------|
+| `text` | Single line text | Name, Title |
+| `textarea` | Multi-line text | Description, Notes |
+| `number` | Numeric input | Age, Price, Quantity |
+| `email` | Email validation | user@example.com |
+| `password` | Password field | Hidden input |
+| `select` | Dropdown options | Status, Category |
+| `checkbox` | Boolean field | Is Active, Featured |
+| `date` | Date picker | Birth Date, Due Date |
+| `datetime` | Date and time | Created At, Event Time |
+| `time` | Time picker | Meeting Time |
+| `file` | File upload | Documents, Attachments |
+| `image` | Image upload | Avatar, Gallery |
+| `json` | JSON data | Settings, Metadata |
+
+## 🔧 API Usage
+
+### Create DocType with Fields
+
+```php
+POST /api/doctypes/doctypes
+{
+  "name": "Customer",
+  "label": "Customer Management", 
+  "description": "CRM system",
+  "fields": [
+    {
+      "fieldname": "first_name",
+      "label": "First Name",
+      "fieldtype": "text",
+      "required": true,
+      "in_list_view": true
+    },
+    {
+      "fieldname": "status", 
+      "label": "Status",
+      "fieldtype": "select",
+      "options": "Active\nInactive",
+      "required": true
+    }
+  ]
+}
+```
+
+### Get Form Schema
+
+```php
+GET /api/doctypes/doctypes/Customer/schema
+{
+  "data": {
+    "doctype": "Customer",
+    "title": "Customer Management",
+    "fields": [
+      {
+        "name": "first_name",
+        "label": "First Name", 
+        "type": "text",
+        "required": true
+      }
+    ]
+  }
+}
+```
+
+### Generate Laravel Files
+
+```php
+POST /api/doctypes/doctypes/Customer/generate
+{
+  "types": ["model", "controller", "request", "resource", "migration"],
+  "force": false
+}
+```
+
+## 🎨 Frontend Components
+
+### DoctypeForm - Visual Field Builder
+
+```vue
+<template>
+  <DoctypeForm 
+    :doctype-id="id" 
+    @saved="handleSaved"
+    @cancelled="handleCancel" 
+  />
+</template>
+```
+
+**Features:**
+- Drag & drop field reordering  
+- Real-time field preview
+- Comprehensive field options
+- Validation rules configuration
+
+### GeneratedForm - Dynamic Form Renderer
+
+```vue
+<template>
+  <GeneratedForm
+    doctype-name="Customer"
+    :initial-data="customerData"
+    @submit="saveCustomer"
+    @field-changed="handleFieldChange"
+  />
+</template>
+```
+
+**Features:**
+- Automatic form generation from schema
+- Client-side validation
+- Field dependency support
+- Custom field renderers
+
+### FieldRenderer - Individual Field Types
+
+```vue
+<template>
+  <FieldRenderer
+    :field="{ name: 'status', type: 'select', options: ['Active', 'Inactive'] }"
+    :modelValue="formData.status"
+    @update:modelValue="updateField"
+  />
+</template>
+```
+
+## 🛠️ Code Generation Examples
+
+### Generate Customer Model
+
+```bash
+php artisan doctype:generate Customer --type=model
+```
+
+```php
+// Generated: app/Models/Customer.php
+class Customer extends Model {
+    protected $fillable = ['first_name', 'last_name', 'email', 'status'];
+    
+    protected $casts = [
+        'is_active' => 'boolean',
+        'metadata' => 'array'
+    ];
+}
+```
+
+### Generate Controller with CRUD
+
+```bash
+php artisan doctype:generate Customer --type=controller
+```
+
+```php
+// Generated: app/Http/Controllers/CustomerController.php  
+class CustomerController extends Controller {
+    public function index() { /* ... */ }
+    public function store(CustomerRequest $request) { /* ... */ }
+    public function show(Customer $customer) { /* ... */ }
+    // ... complete CRUD operations
+}
+```
+
+## 📚 Advanced Usage
+
+### Custom Field Validation
+
+```php
+// In your DocType definition
+$doctype->addField([
+    'fieldname' => 'email',
+    'fieldtype' => 'email', 
+    'validation' => [
+        'rules' => 'required|email|unique:customers,email',
+        'messages' => [
+            'email.unique' => 'This email is already registered'
+        ]
+    ]
+]);
+```
+
+### Dynamic Model Relationships
+
+```php
+// Define relationships in field metadata
+$doctype->addField([
+    'fieldname' => 'category_id',
+    'fieldtype' => 'select',
+    'relationship' => [
+        'model' => 'App\\Models\\Category',
+        'type' => 'belongsTo',
+        'display' => 'name'
+    ]
+]);
+```
+
+### Frontend Type Safety
+
+```typescript
+// Full TypeScript support
+import type { Doctype, DoctypeField, DoctypeFormSchema } from './types/doctype';
+
+const { doctypes, createDoctype, getFormSchema } = useDoctypes();
+
+// Type-safe API calls
+const newDoctype: Doctype = await createDoctype({
+  name: 'Product',
+  label: 'Product Management',
+  fields: [/* typed field definitions */]
+});
+```
+
+## 🔍 Development & Debugging
+
+### Available Artisan Commands
+
+```bash
+# Demo and examples
+php artisan doctype:demo                    # Show demo doctypes
+php artisan doctype:demo --generate         # Generate files for demo data  
+php artisan doctype:demo --reset           # Reset demo data
+
+# Code generation
+php artisan doctype:generate Customer       # Generate all files
+php artisan doctype:generate Customer --type=model,controller
+php artisan doctype:generate Customer --force # Overwrite existing files
+
+# Seeding
+php artisan db:seed --class="Doctypes\Database\Seeders\ComprehensiveDoctypeSeeder"
+```
+
+### Package Structure
+
+```
+doctypes/
+├── src/                          # Laravel backend
+│   ├── Models/                   # Doctype & DoctypeField models
+│   ├── Http/Controllers/         # API controllers
+│   ├── Services/                 # Generator service
+│   ├── Console/Commands/         # Artisan commands
+│   └── routes/api.php           # API routes
+├── resource/js/features/doctypes/ # Vue frontend  
+│   ├── pages/                   # Vue pages
+│   ├── components/              # Vue components
+│   ├── services/                # API services
+│   └── types/                   # TypeScript definitions
+├── database/                     # Migrations & seeders
+└── stubs/                       # Code generation templates
 ```
 
 ## 📖 Documentation
 
-- **[Quick Start Tutorial](QUICK_START.md)** - Complete step-by-step guide
-- **[Generator Examples](GENERATOR_EXAMPLES.md)** - Detailed usage examples and patterns
-- **[API Documentation](docs/API.md)** - Complete API reference
-
-## 🏃‍♂️ Quick Start
-
-**📍 Important: Run these commands in your Laravel project directory, not in the package directory!**
-
-1. **Setup package repository in your Laravel project**:
-   
-   Add to your Laravel project's `composer.json`:
-   ```json
-   {
-       "repositories": [
-           {
-               "type": "path",
-               "url": "./packages/doctypes"
-           }
-       ],
-       "require": {
-           "ngodingskuyy/doctypes": "dev-main"
-       }
-   }
-   ```
-
-2. **Install the package**:
-   ```bash
-   composer install
-   ```
-
-3. **Install and configure**:
-   ```bash
-   php artisan doctype:install
-   ```
-
-4. **Publish frontend components** (if not auto-published):
-   ```bash
-   php artisan vendor:publish --tag="doctypes-views" --force
-   ```
-   
-   > **Note**: If you see duplicate path like `resources/js/features/doctypes/features/doctypes/`, check [FIX_FRONTEND_PATH.md](FIX_FRONTEND_PATH.md) for the solution.
-
-5. **Import in your Vue app**:
-   ```javascript
-   import { useDoctypes } from '@/features/doctypes/services/useDoctypes'
-   import DoctypeList from '@/features/doctypes/pages/DoctypeList.vue'
-   ```
-
-6. **Create your first doctype**:
-   ```php
-   $doctype = Doctype::create([
-       'name' => 'Customer',
-       'fields' => [
-           ['name' => 'customer_name', 'type' => 'text', 'required' => true],
-           ['name' => 'email', 'type' => 'email', 'required' => true],
-           ['name' => 'phone', 'type' => 'tel', 'required' => false],
-       ]
-   ]);
-   ```
-
-> **Need code generation help?** Check [GENERATOR_GUIDE.md](GENERATOR_GUIDE.md) for complete generator usage guide.
-> **Need frontend setup help?** Check [FRONTEND_SETUP.md](FRONTEND_SETUP.md) for Vue.js components guide.
-> **Having installation issues?** Check [QUICK_FIX.md](QUICK_FIX.md) or [INSTALLATION_CHECK.md](INSTALLATION_CHECK.md) for solutions.
-
-7. **Generate Laravel files**:
-   ```bash
-   # Generate all files (Model, Controller, Request, Resource, Migration)
-   php artisan doctype:generate Customer --all
-   
-   # Or generate specific files
-   php artisan doctype:generate Customer --controller --model
-   ```
-
-8. **Run migrations and add routes**:
-   ```bash
-   php artisan migrate
-   
-   # Add to routes/api.php
-   Route::apiResource('customers', CustomerController::class);
-   ```
-
-## 🚀 New: Form Schema Generation
-
-The package now includes **comprehensive form schema generation** from DocType configurations:
-
-### Key Features:
-- **🎯 Dynamic Form Generation** - Convert DocType fields to Vue form schemas automatically
-- **📝 Smart Field Mapping** - Backend field types map to appropriate HTML input types
-- **✅ Built-in Validation** - Frontend and backend validation based on field configuration
-- **🔄 Real-time CRUD** - Generated forms connect directly to API endpoints
-- **🛠️ File Generation** - Auto-generate Laravel models, controllers, and migrations
-- **📱 Demo Interface** - Complete demo page showing the full workflow
-
-### Quick Example:
-```vue
-<!-- Simple usage -->
-<GeneratedForm 
-    doctype-name="product" 
-    @submit="handleSubmit" 
-/>
-
-<!-- With editing -->
-<GeneratedForm 
-    doctype-name="product"
-    :record-id="editingId"
-    @save="handleSave" 
-/>
-```
-
-### API Integration:
-```javascript
-// Get form schema
-const response = await fetchDoctypeSchema('product');
-
-// Generate Laravel files
-await generateDoctypeFiles('product', {
-    types: ['model', 'controller', 'migration'],
-    force: true
-});
-```
-
-📖 **[Complete Form Schema Guide →](FORM_SCHEMA_GUIDE.md)**
-
-## 🔧 Recent Updates & Fixes
-
-**Latest Version Improvements:**
-- ✅ **DoctypeForm.vue** - Fixed template syntax error and improved UI consistency
-- ✅ **Unified Styling** - All components now use consistent shadcn-vue + Tailwind v4 patterns
-- ✅ **Clean Architecture** - Removed deprecated code and improved component structure
-- ✅ **Better UX** - Enhanced form layouts, buttons, and user interaction patterns
-- ✅ **Component Guide** - Added comprehensive [COMPONENT_GUIDE.md](COMPONENT_GUIDE.md) for developers
-
-> **Migration from older versions**: If you're updating from a previous version, re-publish the frontend components to get the latest fixes: `php artisan vendor:publish --tag="doctypes-views" --force`
-
-## 🛠️ Requirements
-
-- PHP 8.1+
-- Laravel 10.x+
-- Vue.js 3.x (for frontend components)
-- Tailwind CSS (for styling)
-
-## 📖 Example
-
-Check out `example.html` for a complete working example.
+- [📋 Quick Start Guide](QUICK_START.md) - Get started in 5 minutes
+- [🔧 Generator Examples](GENERATOR_EXAMPLES.md) - Code generation samples  
+- [🎯 Field Management Demo](FIELD_MANAGEMENT_DEMO.md) - Complete workflow
+- [🐛 Troubleshooting](docs/TROUBLESHOOTING.md) - Common issues & solutions
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 
 ## 📄 License
 
 This package is open-sourced software licensed under the [MIT license](LICENSE).
 
-## 🙏 Credits
+## 🙋‍♂️ Support
 
-Inspired by [Frappe Framework](https://frappeframework.com/)'s DocType system.
-
-## Changelog
-
-### v1.2.1 - Bug Fix Release
-- 🐛 **Fixed duplicate method error** - Resolved "Cannot redeclare generateFile()" error in DoctypeGeneratorService
-- ✅ **Improved code quality** - Consolidated duplicate method definitions and improved method signatures
-- 🧪 **Added tests** - Verified package loads correctly without fatal errors
-
-### v1.2.0 - Tailwind v4 Compatibility Update
-- ✅ **Fixed Tailwind v4 compatibility** - Removed all `@apply` directives and updated CSS classes
-- ✅ **Added shadcn-vue support** - Updated all components to use shadcn-vue design tokens
-- ✅ **Fixed `file:mr-4` utility error** - Resolved file input styling issues
-- ✅ **Modernized component styling** - Updated focus states, colors, and interactive elements
-- ✅ **Enhanced accessibility** - Improved focus indicators and color contrast
-- 📚 **Added migration guide** - See `TAILWIND_V4_UPDATE.md` for detailed changes
-
-### v1.1.0 - Generator & Documentation
-- ✅ **Added DocType Generator** - `php artisan doctype:generate` command with full customization options
-- ✅ **Enhanced Documentation** - Complete API docs, quickstart guide, and troubleshooting
-- ✅ **Fixed Frontend Publishing** - Resolved duplicate folder issues in service provider
-- ✅ **Added Installation Command** - `php artisan doctype:install` for easy setup
-
-### v1.0.0 - Initial Release
+- **Issues**: [GitHub Issues](https://github.com/ngodingskuyy/doctypes/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/ngodingskuyy/doctypes/discussions)
+- **Email**: support@ngodingskuyy.com
 
 ---
 
-**Made with ❤️ by [NgodingSkuyy](https://github.com/ngodingskuyy)**
+**Made with ❤️ by NgodingSkuyy Team**
+
+*Dynamic DocTypes for Modern Laravel Applications*

@@ -124,12 +124,12 @@ class DoctypeController extends Controller
             ], 404);
         }
 
-        $generatorService = app(\Doctypes\Services\DoctypeGeneratorService::class);
-        $schema = $generatorService->generateFormSchema($doctype);
+        // Use the model's generateFormSchema method
+        $schema = $doctype->generateFormSchema();
 
         return response()->json([
-            'doctype' => new DoctypeResource($doctype),
-            'schema' => $schema
+            'data' => $schema,
+            'message' => 'Form schema generated successfully'
         ]);
     }
 

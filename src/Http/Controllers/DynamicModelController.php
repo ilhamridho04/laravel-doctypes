@@ -87,7 +87,7 @@ class DynamicModelController extends Controller
     /**
      * Show a specific record
      */
-    public function show(string $doctypeName, int $id): JsonResponse
+    public function show(string $doctypeName, string $id): JsonResponse
     {
         $tableName = Str::snake(Str::plural($doctypeName));
 
@@ -97,7 +97,9 @@ class DynamicModelController extends Controller
             ], 404);
         }
 
-        $record = DB::table($tableName)->find($id);
+        // Convert string ID to integer for database query
+        $recordId = (int) $id;
+        $record = DB::table($tableName)->find($recordId);
 
         if (!$record) {
             return response()->json([
@@ -113,7 +115,7 @@ class DynamicModelController extends Controller
     /**
      * Update a record
      */
-    public function update(Request $request, string $doctypeName, int $id): JsonResponse
+    public function update(Request $request, string $doctypeName, string $id): JsonResponse
     {
         $tableName = Str::snake(Str::plural($doctypeName));
 
@@ -124,6 +126,7 @@ class DynamicModelController extends Controller
         }
 
         $data = $request->all();
+        $recordId = (int) $id;
 
         // Add updated timestamp if column exists
         if (Schema::hasColumn($tableName, 'updated_at')) {
@@ -131,7 +134,7 @@ class DynamicModelController extends Controller
         }
 
         $updated = DB::table($tableName)
-            ->where('id', $id)
+            ->where('id', $recordId)
             ->update($data);
 
         if (!$updated) {
@@ -140,7 +143,7 @@ class DynamicModelController extends Controller
             ], 404);
         }
 
-        $record = DB::table($tableName)->find($id);
+        $record = DB::table($tableName)->find($recordId);
 
         return response()->json([
             'message' => 'Record updated successfully',
@@ -151,7 +154,7 @@ class DynamicModelController extends Controller
     /**
      * Delete a record
      */
-    public function destroy(string $doctypeName, int $id): JsonResponse
+    public function destroy(string $doctypeName, string $id): JsonResponse
     {
         $tableName = Str::snake(Str::plural($doctypeName));
 
@@ -161,8 +164,9 @@ class DynamicModelController extends Controller
             ], 404);
         }
 
+        $recordId = (int) $id;
         $deleted = DB::table($tableName)
-            ->where('id', $id)
+            ->where('id', $recordId)
             ->delete();
 
         if (!$deleted) {

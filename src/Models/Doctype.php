@@ -5,6 +5,7 @@ namespace Doctypes\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 
 class Doctype extends Model
 {
@@ -34,32 +35,97 @@ class Doctype extends Model
         return $this->hasMany(DoctypeField::class)->orderBy('sort_order');
     }
 
+    /**
+     * Generate form schema for frontend use
+     * Returns JSON schema compatible with GeneratedForm.vue
+     */
     public function generateFormSchema(): array
     {
-        $schema = [];
+        $fields = [];
 
-        // If using the fields JSON column
-        if ($this->fields && is_array($this->fields)) {
-            $schema = $this->fields;
-        } else {
-            // If using the related DoctypeField model
-            $schema = $this->doctypeFields->map(function ($field) {
+        // If using the related DoctypeField model (recommended)
+        if ($this->doctypeFields()->exists()) {
+            $fields = $this->doctypeFields->map(function ($field) {
                 return [
                     'name' => $field->fieldname,
                     'label' => $field->label,
                     'type' => $field->fieldtype,
-                    'required' => $field->required,
-                    'unique' => $field->unique,
-                    'options' => $field->options,
+                    'required' => (bool) $field->required,
                     'description' => $field->description,
+                    'placeholder' => $field->label,
+                    'options' => $this->parseOptions($field->options),
                     'default_value' => $field->default_value,
-                    'in_list_view' => $field->in_list_view,
-                    'in_standard_filter' => $field->in_standard_filter,
+                    // Additional properties for frontend
+                    'validation' => [
+                        'required' => (bool) $field->required,
+                        'unique' => (bool) $field->unique,
+                    ],
+                    // UI properties
+                    'in_list_view' => (bool) $field->in_list_view,
+                    'in_filter' => (bool) $field->in_standard_filter,
+                    'sort_order' => $field->sort_order ?? 0,
                 ];
-            })->toArray();
+            })->sortBy('sort_order')->values()->toArray();
+        } else {
+            // Fallback: if using the fields JSON column
+            if ($this->fields && is_array($this->fields)) {
+                $fields = collect($this->fields)->map(function ($field, $index) {
+                    return [
+                        'name' => $field['fieldname'] ?? $field['name'] ?? "field_{$index}",
+                        'label' => $field['label'] ?? ucfirst($field['name'] ?? "Field {$index}"),
+                        'type' => $field['fieldtype'] ?? $field['type'] ?? 'text',
+                        'required' => (bool) ($field['required'] ?? false),
+                        'description' => $field['description'] ?? '',
+                        'placeholder' => $field['label'] ?? ucfirst($field['name'] ?? "Field {$index}"),
+                        'options' => $this->parseOptions($field['options'] ?? null),
+                        'default_value' => $field['default_value'] ?? null,
+                        'validation' => [
+                            'required' => (bool) ($field['required'] ?? false),
+                            'unique' => (bool) ($field['unique'] ?? false),
+                        ],
+                        'sort_order' => $field['sort_order'] ?? $index,
+                    ];
+                })->sortBy('sort_order')->values()->toArray();
+            }
         }
 
-        return $schema;
+        return [
+            'doctype' => $this->name,
+            'title' => $this->label,
+            'description' => $this->description,
+            'fields' => $fields,
+            'settings' => $this->settings ?? [],
+            'metadata' => [
+                'id' => $this->id,
+                'is_active' => $this->is_active,
+                'is_system' => $this->is_system,
+                'icon' => $this->icon,
+                'color' => $this->color,
+                'created_at' => $this->created_at?->toISOString(),
+                'updated_at' => $this->updated_at?->toISOString(),
+            ]
+        ];
+    }
+
+    /**
+     * Parse options string to array for select fields
+     */
+    private function parseOptions($options): array
+    {
+        if (empty($options)) {
+            return [];
+        }
+
+        if (is_array($options)) {
+            return $options;
+        }
+
+        if (is_string($options)) {
+            // Handle comma-separated values: "option1,option2,option3"
+            return array_map('trim', explode(',', $options));
+        }
+
+        return [];
     }
 
     public function addField(array $fieldData): DoctypeField
