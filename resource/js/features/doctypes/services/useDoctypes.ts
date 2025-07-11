@@ -6,8 +6,15 @@ import type {
     DoctypeListResponse,
     DoctypeResponse,
     DoctypeSchemaResponse,
+    DoctypeGeneratorResponse,
     DoctypeFilters,
-    DoctypeField
+    DoctypeField,
+    FileGenerationRequest,
+    DoctypeFormSchema,
+    UseDoctypesState,
+    UseDoctypesActions,
+    PaginationMeta,
+    ApiError
 } from '../types/doctype';
 
 export const useDoctypes = () => {
@@ -163,13 +170,13 @@ export const useDoctypes = () => {
     };
 
     // Get form schema for a doctype
-    const getFormSchema = async (id: number) => {
+    const getFormSchema = async (id: number): Promise<DoctypeFormSchema> => {
         loading.value = true;
         error.value = null;
 
         try {
             const response = await apiCall<DoctypeSchemaResponse>(`${baseUrl}/${id}/schema`);
-            return response.schema;
+            return response.data.schema;
         } catch (err) {
             error.value = err instanceof Error ? err.message : 'Failed to fetch form schema';
             throw err;
@@ -448,6 +455,212 @@ export const useDoctypes = () => {
         }
     };
 
+    // Get doctype by name (alternative to ID)
+    const getDoctypeByName = async (name: string): Promise<Doctype> => {
+        loading.value = true;
+        error.value = null;
+
+        try {
+            const response = await apiCall<DoctypeResponse>(`${baseUrl}/name/${name}`);
+            return response.data;
+        } catch (err) {
+            error.value = err instanceof Error ? err.message : 'Failed to fetch doctype by name';
+            throw err;
+        } finally {
+            loading.value = false;
+        }
+    };
+
+    // Generate schema by name
+    const generateSchema = async (doctypeName: string): Promise<DoctypeFormSchema> => {
+        loading.value = true;
+        error.value = null;
+
+        try {
+            const response = await apiCall<DoctypeSchemaResponse>(`${baseUrl}/name/${doctypeName}/schema`);
+            return response.data.schema;
+        } catch (err) {
+            error.value = err instanceof Error ? err.message : 'Failed to generate schema';
+            throw err;
+        } finally {
+            loading.value = false;
+        }
+    };
+
+    // Generate files with proper typing
+    const generateFiles = async (request: FileGenerationRequest): Promise<DoctypeGeneratorResponse> => {
+        loading.value = true;
+        error.value = null;
+
+        try {
+            const response = await apiCall<DoctypeGeneratorResponse>('/api/doctypes/generate', {
+                method: 'POST',
+                body: JSON.stringify(request)
+            });
+            return response;
+        } catch (err) {
+            error.value = err instanceof Error ? err.message : 'Failed to generate files';
+            throw err;
+        } finally {
+            loading.value = false;
+        }
+    };
+
+    // Refresh doctypes list
+    const refreshDoctypes = async (): Promise<void> => {
+        const currentFilters = { ...meta.value };
+        await fetchDoctypes({
+            page: currentFilters.current_page,
+            per_page: currentFilters.per_page
+        });
+    };
+
+    // Set current doctype
+    const setCurrentDoctype = (doctype: Doctype | null): void => {
+        currentDoctype.value = doctype;
+    };
+
+    // Get doctype by ID (proper typing)
+    const getDoctypeById = async (id: number): Promise<Doctype> => {
+        return await fetchDoctype(id);
+    };
+
+    // Export doctype
+    const exportDoctype = async (id: number) => {
+        loading.value = true;
+        error.value = null;
+
+        try {
+            const response = await apiCall(`${baseUrl}/${id}/export`);
+            return response;
+        } catch (err) {
+            error.value = err instanceof Error ? err.message : 'Failed to export doctype';
+            throw err;
+        } finally {
+            loading.value = false;
+        }
+    };
+
+    // Import doctype
+    const importDoctype = async (data: any, options: any = {}) => {
+        loading.value = true;
+        error.value = null;
+
+        try {
+            const response = await apiCall(`${baseUrl}/import`, {
+                method: 'POST',
+                body: JSON.stringify({ data, options })
+            });
+
+            // Refresh the list
+            await fetchDoctypes();
+
+            return response;
+        } catch (err) {
+            error.value = err instanceof Error ? err.message : 'Failed to import doctype';
+            throw err;
+        } finally {
+            loading.value = false;
+        }
+    };
+
+    // Duplicate doctype
+    const duplicateDoctype = async (id: number, newName: string) => {
+        loading.value = true;
+        error.value = null;
+
+        try {
+            const response = await apiCall<DoctypeResponse>(`${baseUrl}/${id}/duplicate`, {
+                method: 'POST',
+                body: JSON.stringify({ name: newName })
+            });
+
+            doctypes.value.unshift(response.data);
+            return response.data;
+        } catch (err) {
+            error.value = err instanceof Error ? err.message : 'Failed to duplicate doctype';
+            throw err;
+        } finally {
+            loading.value = false;
+        }
+    };
+
+    // Advanced form validation with custom rules
+    const validateFormAdvanced = (schema: any[], customValidators: Record<string, Function> = {}): boolean => {
+        formErrors.value = {};
+        let isValid = true;
+
+        schema.forEach(field => {
+            const value = formData.value[field.name];
+            const fieldErrors: string[] = [];
+
+            // Basic validation
+            if (field.required && (!value || value === '')) {
+                fieldErrors.push(`${field.label} is required`);
+                isValid = false;
+            }
+
+            // Custom validation
+            if (customValidators[field.name]) {
+                const customResult = customValidators[field.name](value, formData.value);
+                if (customResult !== true && typeof customResult === 'string') {
+                    fieldErrors.push(customResult);
+                    isValid = false;
+                }
+            }
+
+            // Conditional validation based on depends_on
+            if (field.depends_on && !shouldShowField(field, formData.value)) {
+                // Skip validation if field should not be shown
+                return;
+            }
+
+            if (fieldErrors.length > 0) {
+                formErrors.value[field.name] = fieldErrors[0];
+            }
+        });
+
+        return isValid;
+    };
+
+    // Helper function to check if field should be shown
+    const shouldShowField = (field: any, data: Record<string, any>): boolean => {
+        if (!field.depends_on) return true;
+
+        try {
+            // Simple implementation for depends_on evaluation
+            // Format: "fieldname = value" or "fieldname != value"
+            const condition = field.depends_on.trim();
+            const operators = ['!=', '=', '>', '<', '>=', '<='];
+
+            for (const operator of operators) {
+                if (condition.includes(operator)) {
+                    const [fieldName, expectedValue] = condition.split(operator).map(s => s.trim());
+                    const actualValue = data[fieldName];
+
+                    switch (operator) {
+                        case '=':
+                            return actualValue == expectedValue;
+                        case '!=':
+                            return actualValue != expectedValue;
+                        case '>':
+                            return Number(actualValue) > Number(expectedValue);
+                        case '<':
+                            return Number(actualValue) < Number(expectedValue);
+                        case '>=':
+                            return Number(actualValue) >= Number(expectedValue);
+                        case '<=':
+                            return Number(actualValue) <= Number(expectedValue);
+                    }
+                }
+            }
+        } catch (error) {
+            console.warn('Error evaluating depends_on condition:', field.depends_on);
+        }
+
+        return true;
+    };
+
     return {
         // State
         doctypes,
@@ -488,5 +701,15 @@ export const useDoctypes = () => {
         updateFormField,
         validateForm,
         submitFormData,
+        getDoctypeByName,
+        generateSchema,
+        generateFiles,
+        refreshDoctypes,
+        setCurrentDoctype,
+        getDoctypeById,
+        exportDoctype,
+        importDoctype,
+        duplicateDoctype,
+        validateFormAdvanced,
     };
 };
