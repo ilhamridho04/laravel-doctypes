@@ -1,5 +1,4 @@
 // DocTypes Package Exports
-export * from './types/doctype';
 export { useDoctypes } from './services/useDoctypes';
 
 // Vue Components

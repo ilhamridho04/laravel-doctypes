@@ -1,0 +1,19 @@
+{
+    "name": "@features/doctypes",
+    "version": "1.0.0",
+    "type": "module",
+    "main": "index.js",
+    "module": "index.js",
+    "types": "index.ts",
+    "exports": {
+        ".": {
+            "import": "./index.js",
+            "require": "./index.js",
+            "types": "./index.ts"
+        },
+        "./services/*": "./services/*",
+        "./components/*": "./components/*",
+        "./pages/*": "./pages/*",
+        "./types/*": "./types/*"
+    }
+}
