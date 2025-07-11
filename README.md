@@ -9,24 +9,40 @@ A dynamic DocType system for Laravel, inspired by Frappe Framework. Create dynam
 
 ## 🚀 Features
 
-- 🔧 **Dynamic DocType Generator** - Create models, controllers, requests, resources, and migrations automatically
-- 🚀 **Vue 3 + TypeScript Frontend** - Modern, type-safe components for form building and rendering
-- 🎨 **Tailwind v4 + shadcn-vue Compatible** - Modern design system with full Tailwind v4 support
-- 📝 **Dynamic Form Generation** - Generate forms on-the-fly based on DocType field definitions
-- 🎯 **Field Types Support** - Text, textarea, number, email, password, select, checkbox, date, datetime, time, file, image, JSON
-- 🔍 **Validation & Error Handling** - Built-in validation with custom error messages
-- 📊 **JSON Field Metadata** - Store complex field configurations in JSON format
-- 🔒 **Laravel Integration** - Seamless integration with Laravel's service container and routing
-- 📚 **Comprehensive Documentation** - Full API docs, guides, and troubleshooting resources
+- 🔧 **Dynamic Generator** - Create models, controllers, migrations automatically via artisan commands
+- 📝 **Dynamic Forms** - Generate Vue forms from JSON schema with full field metadata support
+- 🎯 **Field Types** - Text, textarea, number, email, select, checkbox, date, datetime, time, file, image, JSON
+- � **API CRUD** - Full REST API for doctype management with Laravel Resource responses
+- 🎨 **Vue 3 + Tailwind v4** - Modern frontend components compatible with shadcn-vue
+- 📊 **JSON Metadata** - Store complex field configurations and validation rules in JSON
 
-## 📚 Documentation
+## ⚡ Quick Start
 
-All documentation is available in the `docs/` folder:
+```bash
+# Install
+composer require ngodingskuyy/doctypes
+php artisan vendor:publish --provider="NgodingSkuyy\Doctypes\Providers\DoctypeServiceProvider"
+php artisan migrate
 
-- **[Installation Guide](docs/INSTALL.md)** - Complete installation instructions
-- **[Quick Start](docs/QUICKSTART.md)** - Get started in 5 minutes
-- **[API Reference](docs/API.md)** - Complete API documentation
-- **[Full Documentation](docs/README.md)** - Comprehensive guide
+# See demo and examples
+php artisan doctype:demo
+
+# Create sample doctypes  
+php artisan db:seed --class="NgodingSkuyy\Doctypes\Database\Seeders\ExampleDoctypeSeeder"
+
+# Generate files
+php artisan doctype:generate Customer
+php artisan doctype:generate Product
+
+# Run migrations
+php artisan migrate
+```
+
+## 📖 Documentation
+
+- **[Quick Start Tutorial](QUICK_START.md)** - Complete step-by-step guide
+- **[Generator Examples](GENERATOR_EXAMPLES.md)** - Detailed usage examples and patterns
+- **[API Documentation](docs/API.md)** - Complete API reference
 
 ## 🏃‍♂️ Quick Start
 
