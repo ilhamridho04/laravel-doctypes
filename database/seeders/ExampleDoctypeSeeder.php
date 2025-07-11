@@ -20,7 +20,7 @@ class ExampleDoctypeSeeder extends Seeder
     {
         $this->createCustomerDoctype();
         $this->createProductDoctype();
-        
+
         $this->command->info('✓ Example doctypes created successfully!');
         $this->command->info('✓ Next steps:');
         $this->command->info('  1. php artisan doctype:generate Customer');
