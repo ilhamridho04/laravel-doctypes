@@ -45,12 +45,12 @@
     },
     "autoload": {
         "psr-4": {
-            "NgodingSkuyy\\Doctypes\\": "src/"
+            "Ngodingskuyy\\Doctypes\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "NgodingSkuyy\\Doctypes\\Tests\\": "tests/"
+            "Ngodingskuyy\\Doctypes\\Tests\\": "tests/"
         }
     },
     "config": {
@@ -62,10 +62,10 @@
         },
         "laravel": {
             "providers": [
-                "NgodingSkuyy\\Doctypes\\Providers\\DoctypeServiceProvider"
+                "Ngodingskuyy\\Doctypes\\Providers\\DoctypeServiceProvider"
             ],
             "aliases": {
-                "Doctype": "NgodingSkuyy\\Doctypes\\Facades\\Doctype"
+                "Doctype": "Ngodingskuyy\\Doctypes\\Facades\\Doctype"
             }
         }
     },
