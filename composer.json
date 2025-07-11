@@ -1,6 +1,6 @@
 {
     "name": "ngodingskuyy/doctypes",
-    "description": "Dynamic DocType system for Laravel - Create Frappe-like dynamic document types with Vue + Tailwind v4",
+    "description": "Dynamic DocType system for Laravel - Create Frappe-like dynamic document types with Vue + Tailwind CSS",
     "type": "library",
     "keywords": [
         "laravel",
@@ -9,8 +9,8 @@
         "frappe",
         "vue",
         "tailwind",
-        "shadcn-vue",
-        "json-schema"
+        "json-schema",
+        "form-builder"
     ],
     "license": "MIT",
     "authors": [
@@ -29,8 +29,8 @@
         "illuminate/support": "^11.0|^12.0",
         "illuminate/database": "^11.0|^12.0",
         "illuminate/validation": "^11.0|^12.0",
-        "spatie/laravel-json-api-paginate": "^1.12",
-        "spatie/laravel-query-builder": "^5.8.1"
+        "spatie/laravel-json-api-paginate": "^1.16",
+        "spatie/laravel-query-builder": "^6.3"
     },
     "suggest": {
         "laravel/framework": "^11.0|^12.0",
