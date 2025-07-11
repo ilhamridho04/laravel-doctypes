@@ -17,7 +17,7 @@ try {
     } else {
         echo "   ✗ Doctype model not found\n";
     }
-    
+
     if (class_exists('Doctypes\Models\DoctypeField')) {
         echo "   ✓ DoctypeField model found\n";
     } else {
@@ -100,19 +100,19 @@ echo "7. Testing frontend files...\n";
 $frontendPath = __DIR__ . '/resource/js/features/doctypes';
 if (is_dir($frontendPath)) {
     echo "   ✓ Frontend directory found\n";
-    
+
     // Check Vue components
     $components = glob($frontendPath . '/components/*.vue');
     echo "   ✓ Found " . count($components) . " Vue component(s)\n";
-    
+
     // Check pages
     $pages = glob($frontendPath . '/pages/*.vue');
     echo "   ✓ Found " . count($pages) . " Vue page(s)\n";
-    
+
     // Check services
     $services = glob($frontendPath . '/services/*.ts');
     echo "   ✓ Found " . count($services) . " service file(s)\n";
-    
+
     // Check types
     $types = glob($frontendPath . '/types/*.d.ts');
     echo "   ✓ Found " . count($types) . " TypeScript definition file(s)\n";

@@ -4,23 +4,25 @@
  * This test checks if all PHP files have valid syntax
  */
 
-function checkPhpSyntax($file) {
+function checkPhpSyntax($file)
+{
     $output = [];
     $returnVar = 0;
     exec("php -l \"$file\" 2>&1", $output, $returnVar);
     return $returnVar === 0;
 }
 
-function scanDirectory($dir, $extension = '.php') {
+function scanDirectory($dir, $extension = '.php')
+{
     $files = [];
     $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir));
-    
+
     foreach ($iterator as $file) {
         if ($file->isFile() && $file->getExtension() === ltrim($extension, '.')) {
             $files[] = $file->getPathname();
         }
     }
-    
+
     return $files;
 }
 
@@ -38,11 +40,11 @@ $totalFiles = 0;
 if (is_dir($srcDir)) {
     echo "📂 Checking src/ directory...\n";
     $phpFiles = scanDirectory($srcDir, '.php');
-    
+
     foreach ($phpFiles as $file) {
         $totalFiles++;
         $relativePath = str_replace($baseDir . '/', '', $file);
-        
+
         if (checkPhpSyntax($file)) {
             echo "   ✓ $relativePath\n";
         } else {
@@ -57,11 +59,11 @@ if (is_dir($srcDir)) {
 if (is_dir($dbDir)) {
     echo "📂 Checking database/ directory...\n";
     $phpFiles = scanDirectory($dbDir, '.php');
-    
+
     foreach ($phpFiles as $file) {
         $totalFiles++;
         $relativePath = str_replace($baseDir . '/', '', $file);
-        
+
         if (checkPhpSyntax($file)) {
             echo "   ✓ $relativePath\n";
         } else {

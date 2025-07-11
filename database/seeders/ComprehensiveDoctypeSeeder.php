@@ -22,7 +22,7 @@ class ComprehensiveDoctypeSeeder extends Seeder
         $this->createProductDoctype();
         $this->createInvoiceDoctype();
         $this->createBlogPostDoctype();
-        
+
         $this->command->info('✓ Comprehensive demo doctypes created successfully!');
         $this->command->info('');
         $this->command->info('📋 Available Doctypes:');
@@ -97,7 +97,7 @@ class ComprehensiveDoctypeSeeder extends Seeder
                 'sort_order' => 4,
                 'description' => 'Primary contact phone number',
             ],
-            
+
             // Classification
             [
                 'fieldname' => 'customer_type',
@@ -122,7 +122,7 @@ class ComprehensiveDoctypeSeeder extends Seeder
                 'description' => 'Customer priority for support',
                 'default_value' => 'Medium',
             ],
-            
+
             // Address Information
             [
                 'fieldname' => 'billing_address',
@@ -140,7 +140,7 @@ class ComprehensiveDoctypeSeeder extends Seeder
                 'sort_order' => 8,
                 'description' => 'Complete shipping address',
             ],
-            
+
             // Financial Information
             [
                 'fieldname' => 'credit_limit',
@@ -161,7 +161,7 @@ class ComprehensiveDoctypeSeeder extends Seeder
                 'description' => 'Default payment terms',
                 'default_value' => 'Net 30',
             ],
-            
+
             // Status & Metadata
             [
                 'fieldname' => 'is_active',
@@ -189,7 +189,7 @@ class ComprehensiveDoctypeSeeder extends Seeder
                 'sort_order' => 13,
                 'description' => 'Last time customer was contacted',
             ],
-            
+
             // Additional Data
             [
                 'fieldname' => 'tags',
@@ -277,7 +277,7 @@ class ComprehensiveDoctypeSeeder extends Seeder
                 'sort_order' => 4,
                 'description' => 'Brief product summary',
             ],
-            
+
             // Categorization
             [
                 'fieldname' => 'category',
@@ -308,7 +308,7 @@ class ComprehensiveDoctypeSeeder extends Seeder
                 'sort_order' => 7,
                 'description' => 'Manufacturer model number',
             ],
-            
+
             // Pricing
             [
                 'fieldname' => 'cost_price',
@@ -335,7 +335,7 @@ class ComprehensiveDoctypeSeeder extends Seeder
                 'sort_order' => 10,
                 'description' => 'Discounted sale price',
             ],
-            
+
             // Inventory
             [
                 'fieldname' => 'stock_quantity',
@@ -364,7 +364,7 @@ class ComprehensiveDoctypeSeeder extends Seeder
                 'sort_order' => 13,
                 'description' => 'Maximum stock to maintain',
             ],
-            
+
             // Physical Properties
             [
                 'fieldname' => 'weight',
@@ -382,7 +382,7 @@ class ComprehensiveDoctypeSeeder extends Seeder
                 'sort_order' => 15,
                 'description' => 'Product dimensions (L x W x H) in JSON format',
             ],
-            
+
             // Digital Assets
             [
                 'fieldname' => 'images',
@@ -400,7 +400,7 @@ class ComprehensiveDoctypeSeeder extends Seeder
                 'sort_order' => 17,
                 'description' => 'Main product image',
             ],
-            
+
             // Status & Flags
             [
                 'fieldname' => 'is_active',
@@ -430,7 +430,7 @@ class ComprehensiveDoctypeSeeder extends Seeder
                 'sort_order' => 20,
                 'description' => 'Product needs physical shipping',
             ],
-            
+
             // Metadata
             [
                 'fieldname' => 'specifications',
@@ -517,7 +517,7 @@ class ComprehensiveDoctypeSeeder extends Seeder
                 'sort_order' => 3,
                 'description' => 'Customer email for invoice delivery',
             ],
-            
+
             // Dates
             [
                 'fieldname' => 'invoice_date',
@@ -537,7 +537,7 @@ class ComprehensiveDoctypeSeeder extends Seeder
                 'sort_order' => 5,
                 'description' => 'Payment due date',
             ],
-            
+
             // Financial Details
             [
                 'fieldname' => 'subtotal',
@@ -583,7 +583,7 @@ class ComprehensiveDoctypeSeeder extends Seeder
                 'sort_order' => 10,
                 'description' => 'Final invoice total',
             ],
-            
+
             // Status & Payment
             [
                 'fieldname' => 'status',
@@ -615,7 +615,7 @@ class ComprehensiveDoctypeSeeder extends Seeder
                 'sort_order' => 13,
                 'description' => 'Date and time payment was received',
             ],
-            
+
             // Line Items & Additional Data
             [
                 'fieldname' => 'line_items',
@@ -717,7 +717,7 @@ class ComprehensiveDoctypeSeeder extends Seeder
                 'sort_order' => 4,
                 'description' => 'Main blog post content (HTML/Markdown)',
             ],
-            
+
             // Classification
             [
                 'fieldname' => 'category',
@@ -738,7 +738,7 @@ class ComprehensiveDoctypeSeeder extends Seeder
                 'sort_order' => 6,
                 'description' => 'Post tags in JSON array format',
             ],
-            
+
             // Author & Publishing
             [
                 'fieldname' => 'author_name',
@@ -778,7 +778,7 @@ class ComprehensiveDoctypeSeeder extends Seeder
                 'sort_order' => 10,
                 'description' => 'Date and time of publication',
             ],
-            
+
             // SEO & Social
             [
                 'fieldname' => 'meta_title',
@@ -812,7 +812,7 @@ class ComprehensiveDoctypeSeeder extends Seeder
                 'sort_order' => 14,
                 'description' => 'Image for social media sharing',
             ],
-            
+
             // Engagement & Analytics
             [
                 'fieldname' => 'view_count',
