@@ -13,26 +13,39 @@ class Doctype extends Model
 
     protected $fillable = [
         'name',
-        'label',
+        'module',
+        'title_field',
+        'is_submittable',
+        'is_single',
+        'is_tree',
+        'is_table',
+        'engine',
         'description',
         'fields',
-        'settings',
-        'is_active',
-        'is_system',
-        'icon',
-        'color',
+        'permissions',
+        'actions',
+        'links'
     ];
 
     protected $casts = [
         'fields' => 'array',
-        'settings' => 'array',
-        'is_active' => 'boolean',
-        'is_system' => 'boolean',
+        'permissions' => 'array',
+        'actions' => 'array',
+        'links' => 'array',
+        'is_submittable' => 'boolean',
+        'is_single' => 'boolean',
+        'is_tree' => 'boolean',
+        'is_table' => 'boolean'
     ];
 
-    public function doctypeFields(): HasMany
+    public function documents(): HasMany
     {
-        return $this->hasMany(DoctypeField::class)->orderBy('sort_order');
+        return $this->hasMany(DoctypeDocument::class);
+    }
+
+    public function getTableAttribute(): string
+    {
+        return 'tab' . strtolower(str_replace(' ', '_', $this->name));
     }
 
     /**

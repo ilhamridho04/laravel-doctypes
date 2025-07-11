@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | DocTypes Configuration
@@ -121,4 +120,41 @@ return [
         'custom_rules' => [],
     ],
 
+    'prefix' => 'doctypes',
+
+    'middleware' => ['web'],
+
+    'components' => [
+        'form' => 'DoctypeForm',
+        'list' => 'DoctypeList',
+        'view' => 'DoctypeView'
+    ],
+
+    'field_types' => [
+        'Data' => 'text',
+        'Int' => 'number',
+        'Float' => 'number',
+        'Currency' => 'currency',
+        'Check' => 'checkbox',
+        'Select' => 'select',
+        'Link' => 'link',
+        'Text' => 'textarea',
+        'Text Editor' => 'editor',
+        'Date' => 'date',
+        'Datetime' => 'datetime',
+        'Time' => 'time',
+        'Table' => 'table',
+        'Attach' => 'file',
+        'Attach Image' => 'image'
+    ],
+
+    'permissions' => [
+        'read' => 1,
+        'write' => 1,
+        'create' => 1,
+        'delete' => 1,
+        'submit' => 1,
+        'cancel' => 1,
+        'amend' => 1
+    ]
 ];

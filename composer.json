@@ -1,13 +1,16 @@
 {
     "name": "ngodingskuyy/doctypes",
-    "description": "Dynamic DocType system for Laravel - Create Frappe-like dynamic document types",
+    "description": "Dynamic DocType system for Laravel - Create Frappe-like dynamic document types with Vue + Tailwind v4",
     "type": "library",
     "keywords": [
         "laravel",
         "doctype",
         "dynamic-forms",
         "frappe",
-        "vue"
+        "vue",
+        "tailwind",
+        "shadcn-vue",
+        "json-schema"
     ],
     "license": "MIT",
     "authors": [
@@ -22,14 +25,24 @@
         "source": "https://github.com/ilhamridho04/laravel-doctypes"
     },
     "require": {
-        "php": "^8.1|^8.2|^8.3"
+        "php": "^8.2|^8.3",
+        "illuminate/support": "^11.0|^12.0",
+        "illuminate/database": "^11.0|^12.0",
+        "illuminate/validation": "^11.0|^12.0",
+        "spatie/laravel-json-api-paginate": "^1.12",
+        "spatie/laravel-query-builder": "^5.0",
+        "justinrainbow/json-schema": "^5.2"
     },
     "suggest": {
-        "laravel/framework": "^10.0|^11.0|^12.0"
+        "laravel/framework": "^11.0|^12.0",
+        "inertiajs/inertia-laravel": "^1.0",
+        "tightenco/ziggy": "^2.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^9.0|^10.0|^11.0",
-        "orchestra/testbench": "^8.0|^9.0|^10.0"
+        "phpunit/phpunit": "^10.0|^11.0",
+        "orchestra/testbench": "^9.0|^10.0",
+        "laravel/pint": "^1.13",
+        "phpstan/phpstan": "^1.10"
     },
     "autoload": {
         "psr-4": {
@@ -46,12 +59,15 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-main": "4.x-dev"
+            "dev-main": "1.x-dev"
         },
         "laravel": {
             "providers": [
                 "Doctypes\\Providers\\DoctypeServiceProvider"
-            ]
+            ],
+            "aliases": {
+                "Doctype": "Doctypes\\Facades\\Doctype"
+            }
         }
     },
     "minimum-stability": "stable",

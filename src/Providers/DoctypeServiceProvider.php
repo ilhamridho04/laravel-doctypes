@@ -3,10 +3,9 @@
 namespace Doctypes\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Doctypes\Console\Commands\InstallDoctypeCommand;
-use Doctypes\Console\Commands\GenerateDoctypeCommand;
-use Doctypes\Console\Commands\DoctypeDemoCommand;
-use Doctypes\Services\DoctypeGeneratorService;
+use Doctypes\Services\DoctypeService;
+use Doctypes\Services\DoctypeRenderer;
+use Doctypes\Services\DoctypeValidator;
 
 class DoctypeServiceProvider extends ServiceProvider
 {
@@ -15,14 +14,12 @@ class DoctypeServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        // Register the generator service
-        $this->app->singleton(DoctypeGeneratorService::class);
+        $this->app->singleton('doctype', function ($app) {
+            return new DoctypeService();
+        });
 
-        // Register config
-        $this->mergeConfigFrom(
-            __DIR__ . '/../../config/doctypes.php',
-            'doctypes'
-        );
+        $this->app->singleton(DoctypeRenderer::class);
+        $this->app->singleton(DoctypeValidator::class);
     }
 
     /**
@@ -30,34 +27,23 @@ class DoctypeServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Load routes
-        $this->loadRoutesFrom(__DIR__ . '/../routes/api.php');
-
         // Load migrations
         $this->loadMigrationsFrom(__DIR__ . '/../../database/migrations');
+        $this->loadRoutesFrom(__DIR__ . '/../../routes/web.php');
 
-        // Register commands
-        if ($this->app->runningInConsole()) {
-            $this->commands([
-                InstallDoctypeCommand::class,
-                GenerateDoctypeCommand::class,
-                DoctypeDemoCommand::class,
-            ]);
+        // Publish config
+        $this->publishes([
+            __DIR__ . '/../../config/doctypes.php' => config_path('doctypes.php'),
+        ], 'doctypes-config');
 
-            // Publish config
-            $this->publishes([
-                __DIR__ . '/../../config/doctypes.php' => $this->app->configPath('doctypes.php'),
-            ], 'doctypes-config');
+        // Publish Vue files
+        $this->publishes([
+            __DIR__ . '/../../resources/js' => resource_path('js/doctypes'),
+        ], 'doctypes-vue');
 
-            // Publish migrations
-            $this->publishes([
-                __DIR__ . '/../../database/migrations' => $this->app->databasePath('migrations'),
-            ], 'doctypes-migrations');
-
-            // Publish views
-            $this->publishes([
-                __DIR__ . '/../../resource/js/features/doctypes' => $this->app->resourcePath('js/features/doctypes'),
-            ], 'doctypes-views');
-        }
+        // Publish migrations
+        $this->publishes([
+            __DIR__ . '/../../database/migrations/' => database_path('migrations'),
+        ], 'doctypes-migrations');
     }
 }
