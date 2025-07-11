@@ -1,10 +1,10 @@
 <?php
 
-namespace NgodingSkuyy\Doctypes\Database\Seeders;
+namespace Doctypes\Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use NgodingSkuyy\Doctypes\Models\Doctype;
-use NgodingSkuyy\Doctypes\Models\DoctypeField;
+use Doctypes\Models\Doctype;
+use Doctypes\Models\DoctypeField;
 
 class ExampleDoctypeSeeder extends Seeder
 {

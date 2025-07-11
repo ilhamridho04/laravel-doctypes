@@ -5,7 +5,7 @@ namespace Doctypes\Providers;
 use Illuminate\Support\ServiceProvider;
 use Doctypes\Console\Commands\InstallDoctypeCommand;
 use Doctypes\Console\Commands\GenerateDoctypeCommand;
-use Doctypes\Console\Commands\DemoCommand;
+use Doctypes\Console\Commands\DoctypeDemoCommand;
 use Doctypes\Services\DoctypeGeneratorService;
 
 class DoctypeServiceProvider extends ServiceProvider
@@ -41,7 +41,7 @@ class DoctypeServiceProvider extends ServiceProvider
             $this->commands([
                 InstallDoctypeCommand::class,
                 GenerateDoctypeCommand::class,
-                DemoCommand::class,
+                DoctypeDemoCommand::class,
             ]);
 
             // Publish config

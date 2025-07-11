@@ -24,8 +24,8 @@ php artisan migrate
 // database/seeders/CustomDoctypeSeeder.php
 
 use Illuminate\Database\Seeder;
-use NgodingSkuyy\Doctypes\Models\Doctype;
-use NgodingSkuyy\Doctypes\Models\DoctypeField;
+use Doctypes\Models\Doctype;
+use Doctypes\Models\DoctypeField;
 
 class CustomDoctypeSeeder extends Seeder
 {

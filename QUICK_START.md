@@ -15,7 +15,7 @@ php artisan migrate
 php artisan doctype:demo
 
 # Buat sample doctypes (Customer & Product)
-php artisan db:seed --class="NgodingSkuyy\Doctypes\Database\Seeders\ExampleDoctypeSeeder"
+php artisan db:seed --class="Doctypes\Database\Seeders\ExampleDoctypeSeeder"
 ```
 
 ### 3. Generate Files
@@ -143,7 +143,7 @@ php artisan doctype:generate Customer --types=controller,request
 ### 1. E-commerce Store
 ```bash
 # Create product catalog
-php artisan db:seed --class="NgodingSkuyy\Doctypes\Database\Seeders\ExampleDoctypeSeeder"
+php artisan db:seed --class="Doctypes\Database\Seeders\ExampleDoctypeSeeder"
 php artisan doctype:generate Product
 php artisan migrate
 ```

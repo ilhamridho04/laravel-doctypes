@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctypes Package - Quick Test</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-8">
+    <div id="app">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="text-3xl font-bold text-center mb-8">Laravel Doctypes Package</h1>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Feature Cards -->
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <h2 class="text-xl font-semibold mb-4">🔧 Dynamic Generator</h2>
+                    <p class="text-gray-600 mb-4">Generate models, controllers, and migrations automatically</p>
+                    <code class="bg-gray-100 p-2 rounded text-sm block">
+                        php artisan doctype:generate Customer
+                    </code>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <h2 class="text-xl font-semibold mb-4">📝 Dynamic Forms</h2>
+                    <p class="text-gray-600 mb-4">Generate Vue forms from JSON schema</p>
+                    <code class="bg-gray-100 p-2 rounded text-sm block">
+                        &lt;GeneratedForm doctype-name="Customer" /&gt;
+                    </code>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <h2 class="text-xl font-semibold mb-4">🎯 Field Types</h2>
+                    <p class="text-gray-600 mb-4">Support for all common field types</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">text</span>
+                        <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">email</span>
+                        <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">select</span>
+                        <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">date</span>
+                        <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">json</span>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <h2 class="text-xl font-semibold mb-4">🔧 API CRUD</h2>
+                    <p class="text-gray-600 mb-4">Full REST API for doctype management</p>
+                    <code class="bg-gray-100 p-2 rounded text-sm block">
+                        GET /api/doctypes/doctypes
+                    </code>
+                </div>
+            </div>
+
+            <!-- Quick Start -->
+            <div class="bg-white p-6 rounded-lg shadow mt-8">
+                <h2 class="text-2xl font-semibold mb-4">⚡ Quick Start</h2>
+                <div class="space-y-2">
+                    <div class="flex items-center">
+                        <span class="bg-gray-800 text-white px-2 py-1 rounded text-sm mr-3">1</span>
+                        <code class="bg-gray-100 p-2 rounded flex-1">composer require ngodingskuyy/doctypes</code>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="bg-gray-800 text-white px-2 py-1 rounded text-sm mr-3">2</span>
+                        <code class="bg-gray-100 p-2 rounded flex-1">php artisan vendor:publish --provider="NgodingSkuyy\Doctypes\Providers\DoctypeServiceProvider"</code>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="bg-gray-800 text-white px-2 py-1 rounded text-sm mr-3">3</span>
+                        <code class="bg-gray-100 p-2 rounded flex-1">php artisan migrate</code>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="bg-gray-800 text-white px-2 py-1 rounded text-sm mr-3">4</span>
+                        <code class="bg-gray-100 p-2 rounded flex-1">php artisan doctype:demo</code>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Demo Commands -->
+            <div class="bg-white p-6 rounded-lg shadow mt-8">
+                <h2 class="text-2xl font-semibold mb-4">🎮 Demo Commands</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="border rounded p-4">
+                        <h3 class="font-semibold mb-2">Show Demo</h3>
+                        <code class="bg-gray-100 p-2 rounded text-sm block">php artisan doctype:demo</code>
+                    </div>
+                    <div class="border rounded p-4">
+                        <h3 class="font-semibold mb-2">Generate Files</h3>
+                        <code class="bg-gray-100 p-2 rounded text-sm block">php artisan doctype:demo --generate</code>
+                    </div>
+                    <div class="border rounded p-4">
+                        <h3 class="font-semibold mb-2">Reset Demo</h3>
+                        <code class="bg-gray-100 p-2 rounded text-sm block">php artisan doctype:demo --reset</code>
+                    </div>
+                </div>
+            </div>
+
+            <!-- File Structure -->
+            <div class="bg-white p-6 rounded-lg shadow mt-8">
+                <h2 class="text-2xl font-semibold mb-4">📁 Generated Files</h2>
+                <div class="text-sm space-y-1 font-mono">
+                    <div class="text-green-600">✓ app/Models/Customer.php</div>
+                    <div class="text-green-600">✓ app/Http/Controllers/CustomerController.php</div>
+                    <div class="text-green-600">✓ app/Http/Requests/CustomerRequest.php</div>
+                    <div class="text-green-600">✓ app/Http/Resources/CustomerResource.php</div>
+                    <div class="text-green-600">✓ database/migrations/xxxx_create_customers_table.php</div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="text-center mt-8 text-gray-500">
+                <p>Laravel Doctypes Package - Dynamic DocType system inspired by Frappe Framework</p>
+                <p class="text-sm mt-2">
+                    <a href="https://github.com/ngodingskuyy/doctypes" class="text-blue-600 hover:underline">GitHub</a> |
+                    <a href="#" class="text-blue-600 hover:underline">Documentation</a> |
+                    <a href="#" class="text-blue-600 hover:underline">Examples</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const { createApp, ref } = Vue;
+        
+        createApp({
+            setup() {
+                const message = ref('Laravel Doctypes Package is ready! 🚀');
+                
+                return {
+                    message
+                };
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>

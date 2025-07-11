@@ -1,10 +1,10 @@
 <?php
 
-namespace NgodingSkuyy\Doctypes\Console\Commands;
+namespace Doctypes\Console\Commands;
 
 use Illuminate\Console\Command;
-use NgodingSkuyy\Doctypes\Models\Doctype;
-use NgodingSkuyy\Doctypes\Services\DoctypeGeneratorService;
+use Doctypes\Models\Doctype;
+use Doctypes\Services\DoctypeGeneratorService;
 
 class DoctypeDemoCommand extends Command
 {
@@ -50,7 +50,7 @@ class DoctypeDemoCommand extends Command
 
         if (!$customerDoctype || !$productDoctype) {
             $this->warn('Demo doctypes not found. Creating them now...');
-            $this->call('db:seed', ['--class' => 'NgodingSkuyy\\Doctypes\\Database\\Seeders\\ExampleDoctypeSeeder']);
+            $this->call('db:seed', ['--class' => 'Doctypes\\Database\\Seeders\\ExampleDoctypeSeeder']);
             $this->newLine();
         }
 
@@ -113,7 +113,7 @@ class DoctypeDemoCommand extends Command
 
         $this->info('📚 Documentation: See GENERATOR_EXAMPLES.md for detailed examples');
 
-        return self::SUCCESS;
+        return Command::SUCCESS;
     }
 
     /**
@@ -152,7 +152,7 @@ class DoctypeDemoCommand extends Command
         $this->line('   <fg=green>Route::apiResource(\'customers\', CustomerController::class);</>');
         $this->line('   <fg=green>Route::apiResource(\'products\', ProductController::class);</>');
 
-        return self::SUCCESS;
+        return Command::SUCCESS;
     }
 
     /**
@@ -200,6 +200,6 @@ class DoctypeDemoCommand extends Command
 
         $this->info('✓ Demo reset complete');
 
-        return self::SUCCESS;
+        return Command::SUCCESS;
     }
 }
