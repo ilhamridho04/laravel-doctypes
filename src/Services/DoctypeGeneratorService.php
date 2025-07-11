@@ -1,8 +1,8 @@
 <?php
 
-namespace Doctypes\Services;
+namespace NgodingSkuyy\Doctypes\Services;
 
-use Doctypes\Models\Doctype;
+use NgodingSkuyy\Doctypes\Models\Doctype;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 

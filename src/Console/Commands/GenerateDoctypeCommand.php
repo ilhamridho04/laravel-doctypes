@@ -1,10 +1,10 @@
 <?php
 
-namespace Doctypes\Console\Commands;
+namespace NgodingSkuyy\Doctypes\Console\Commands;
 
 use Illuminate\Console\Command;
-use Doctypes\Services\DoctypeGeneratorService;
-use Doctypes\Models\Doctype;
+use NgodingSkuyy\Doctypes\Services\DoctypeGeneratorService;
+use NgodingSkuyy\Doctypes\Models\Doctype;
 
 class GenerateDoctypeCommand extends Command
 {

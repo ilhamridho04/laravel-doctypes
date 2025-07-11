@@ -6,7 +6,7 @@
  * (c) Ilham Ridho Asysyifa'a <ilhamridho.ir@gmail.com>
  */
 
-namespace Doctypes\Console\Commands;
+namespace NgodingSkuyy\Doctypes\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
