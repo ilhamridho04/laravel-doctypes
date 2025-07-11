@@ -30,8 +30,7 @@
         "illuminate/database": "^11.0|^12.0",
         "illuminate/validation": "^11.0|^12.0",
         "spatie/laravel-json-api-paginate": "^1.12",
-        "spatie/laravel-query-builder": "^5.0",
-        "justinrainbow/json-schema": "^5.2"
+        "spatie/laravel-query-builder": "^5.8.1"
     },
     "suggest": {
         "laravel/framework": "^11.0|^12.0",
