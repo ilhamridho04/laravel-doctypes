@@ -1,6 +1,6 @@
 <?php
 
-namespace Doctypes\Models;
+namespace Ngodingskuyy\Doctypes\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -11,36 +11,23 @@ class Doctype extends Model
 {
     use HasFactory;
 
+    protected $table = 'doctypes';
+
     protected $fillable = [
         'name',
-        'module',
-        'title_field',
-        'is_submittable',
-        'is_single',
-        'is_tree',
-        'is_table',
-        'engine',
-        'description',
-        'fields',
-        'permissions',
-        'actions',
-        'links'
+        'label',
+        'schema',
+        'config',
     ];
 
     protected $casts = [
-        'fields' => 'array',
-        'permissions' => 'array',
-        'actions' => 'array',
-        'links' => 'array',
-        'is_submittable' => 'boolean',
-        'is_single' => 'boolean',
-        'is_tree' => 'boolean',
-        'is_table' => 'boolean'
+        'schema' => 'array',
+        'config' => 'array',
     ];
 
     public function documents(): HasMany
     {
-        return $this->hasMany(DoctypeDocument::class);
+        return $this->hasMany(DoctypeDocument::class, 'doctype_id');
     }
 
     public function getTableAttribute(): string
@@ -141,7 +128,7 @@ class Doctype extends Model
         return [];
     }
 
-    public function addField(array $fieldData): DoctypeField
+    public function addField(array $fieldData)
     {
         return $this->doctypeFields()->create($fieldData);
     }

@@ -1,5 +1,11 @@
 <?php
 
+/*
+ * This file is part of the DocTypes package.
+ *
+ * (c) Ilham Ridho Asysyifa'a <ilhamridho.ir@gmail.com>
+ */
+
 namespace Doctypes\Console\Commands;
 
 use Illuminate\Console\Command;
@@ -31,7 +37,7 @@ class InstallDoctypeCommand extends Command
         // Publish frontend components
         $this->info('Publishing frontend components...');
         Artisan::call('vendor:publish', [
-            '--tag' => 'doctypes-views',
+            '--tag' => 'doctypes-vue',
             '--force' => true
         ]);
 

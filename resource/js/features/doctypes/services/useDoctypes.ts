@@ -11,9 +11,41 @@ import type {
     FileGenerationRequest,
 } from '../types/doctype';
 
+// Document types
+interface DoctypeDocument {
+    id: number;
+    name: string;
+    title?: string;
+    display_name: string;
+    data: Record<string, any>;
+    created_at: string;
+    updated_at: string;
+    creator?: {
+        id: number;
+        name: string;
+    };
+}
+
+interface DocumentListResponse {
+    data: DoctypeDocument[];
+    meta: {
+        current_page: number;
+        last_page: number;
+        per_page: number;
+        total: number;
+    };
+}
+
+interface DocumentResponse {
+    data: DoctypeDocument;
+    message?: string;
+}
+
 export const useDoctypes = () => {
     const doctypes = ref<Doctype[]>([]);
     const currentDoctype = ref<Doctype | null>(null);
+    const documents = ref<DoctypeDocument[]>([]);
+    const currentDocument = ref<DoctypeDocument | null>(null);
     const loading = ref(false);
     const error = ref<string | null>(null);
     const meta = ref({
@@ -198,15 +230,225 @@ export const useDoctypes = () => {
         }
     };
 
+    // Document Management Functions
+
+    // Get documents for a specific doctype
+    const getDocuments = async (
+        doctypeName: string,
+        page: number = 1,
+        perPage: number = 15,
+        filters: Record<string, any> = {}
+    ) => {
+        loading.value = true;
+        error.value = null;
+
+        try {
+            const params = new URLSearchParams({
+                page: page.toString(),
+                per_page: perPage.toString(),
+                ...filters
+            });
+
+            const response: DocumentListResponse = await apiCall(
+                `/api/doctypes/documents/${doctypeName}?${params}`
+            );
+
+            documents.value = response.data;
+            meta.value = response.meta;
+            return response.data;
+        } catch (err) {
+            error.value = err instanceof Error ? err.message : 'Failed to fetch documents';
+            console.error('Error fetching documents:', err);
+            throw err;
+        } finally {
+            loading.value = false;
+        }
+    };
+
+    // Create a new document
+    const createDocument = async (doctypeName: string, data: Record<string, any>) => {
+        loading.value = true;
+        error.value = null;
+
+        try {
+            const response: DocumentResponse = await apiCall(`/api/doctypes/documents/${doctypeName}`, {
+                method: 'POST',
+                body: JSON.stringify(data),
+            });
+
+            // Add to local list if we're showing documents for this doctype
+            documents.value.unshift(response.data);
+            return response.data;
+        } catch (err) {
+            error.value = err instanceof Error ? err.message : 'Failed to create document';
+            console.error('Error creating document:', err);
+            throw err;
+        } finally {
+            loading.value = false;
+        }
+    };
+
+    // Get a specific document
+    const getDocument = async (doctypeName: string, documentId: number) => {
+        loading.value = true;
+        error.value = null;
+
+        try {
+            const response: DocumentResponse = await apiCall(
+                `/api/doctypes/documents/${doctypeName}/${documentId}`
+            );
+
+            currentDocument.value = response.data;
+            return response.data;
+        } catch (err) {
+            error.value = err instanceof Error ? err.message : 'Failed to fetch document';
+            console.error('Error fetching document:', err);
+            throw err;
+        } finally {
+            loading.value = false;
+        }
+    };
+
+    // Update a document
+    const updateDocument = async (
+        doctypeName: string,
+        documentId: number,
+        data: Record<string, any>
+    ) => {
+        loading.value = true;
+        error.value = null;
+
+        try {
+            const response: DocumentResponse = await apiCall(
+                `/api/doctypes/documents/${doctypeName}/${documentId}`,
+                {
+                    method: 'PUT',
+                    body: JSON.stringify(data),
+                }
+            );
+
+            // Update in local list
+            const index = documents.value.findIndex(d => d.id === documentId);
+            if (index !== -1) {
+                documents.value[index] = response.data;
+            }
+
+            // Update current document if it's the one being edited
+            if (currentDocument.value?.id === documentId) {
+                currentDocument.value = response.data;
+            }
+
+            return response.data;
+        } catch (err) {
+            error.value = err instanceof Error ? err.message : 'Failed to update document';
+            console.error('Error updating document:', err);
+            throw err;
+        } finally {
+            loading.value = false;
+        }
+    };
+
+    // Delete a document
+    const deleteDocument = async (doctypeName: string, documentId: number) => {
+        loading.value = true;
+        error.value = null;
+
+        try {
+            await apiCall(`/api/doctypes/documents/${doctypeName}/${documentId}`, {
+                method: 'DELETE',
+            });
+
+            // Remove from local list
+            documents.value = documents.value.filter(d => d.id !== documentId);
+
+            // Clear current document if it's the one being deleted
+            if (currentDocument.value?.id === documentId) {
+                currentDocument.value = null;
+            }
+        } catch (err) {
+            error.value = err instanceof Error ? err.message : 'Failed to delete document';
+            console.error('Error deleting document:', err);
+            throw err;
+        } finally {
+            loading.value = false;
+        }
+    };
+
+    // Get raw document data for editing
+    const getDocumentForEdit = async (doctypeName: string, documentId: number) => {
+        loading.value = true;
+        error.value = null;
+
+        try {
+            const response = await apiCall(`/api/doctypes/documents/${doctypeName}/${documentId}/edit`);
+            return response.data;
+        } catch (err) {
+            error.value = err instanceof Error ? err.message : 'Failed to fetch document for edit';
+            console.error('Error fetching document for edit:', err);
+            throw err;
+        } finally {
+            loading.value = false;
+        }
+    };
+
+    // Duplicate a document
+    const duplicateDocument = async (doctypeName: string, documentId: number) => {
+        loading.value = true;
+        error.value = null;
+
+        try {
+            const response: DocumentResponse = await apiCall(
+                `/api/doctypes/documents/${doctypeName}/${documentId}/duplicate`,
+                { method: 'POST' }
+            );
+
+            // Add to local list
+            documents.value.unshift(response.data);
+            return response.data;
+        } catch (err) {
+            error.value = err instanceof Error ? err.message : 'Failed to duplicate document';
+            console.error('Error duplicating document:', err);
+            throw err;
+        } finally {
+            loading.value = false;
+        }
+    };
+
+    // Get list view configuration for a doctype
+    const getListConfig = async (doctypeName: string) => {
+        try {
+            const response = await apiCall(`${baseUrl}/${doctypeName}/list-config`);
+            return response.data;
+        } catch (err) {
+            error.value = err instanceof Error ? err.message : 'Failed to get list configuration';
+            console.error('Error getting list configuration:', err);
+            throw err;
+        }
+    };
+
+    // Get statistics for a doctype
+    const getDoctypeStats = async (doctypeName: string) => {
+        try {
+            const response = await apiCall(`${baseUrl}/${doctypeName}/stats`);
+            return response.data;
+        } catch (err) {
+            error.value = err instanceof Error ? err.message : 'Failed to get doctype statistics';
+            console.error('Error getting doctype statistics:', err);
+            throw err;
+        }
+    };
+
     return {
         // State
         doctypes,
         currentDoctype,
+        documents,
+        currentDocument,
         loading,
         error,
         meta,
 
-        // Actions
+        // Doctype Actions
         fetchDoctypes,
         fetchDoctype,
         createDoctype,
@@ -214,5 +456,16 @@ export const useDoctypes = () => {
         deleteDoctype,
         getFormSchema,
         generateFiles,
+        getListConfig,
+        getDoctypeStats,
+
+        // Document Actions
+        getDocuments,
+        createDocument,
+        getDocument,
+        updateDocument,
+        deleteDocument,
+        getDocumentForEdit,
+        duplicateDocument,
     };
 };
