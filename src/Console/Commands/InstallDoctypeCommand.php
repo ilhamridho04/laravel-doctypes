@@ -37,7 +37,7 @@ class InstallDoctypeCommand extends Command
         // Publish frontend components
         $this->info('Publishing frontend components...');
         Artisan::call('vendor:publish', [
-            '--tag' => 'doctypes-vue',
+            '--tag' => 'doctypes-frontend',
             '--force' => true
         ]);
 

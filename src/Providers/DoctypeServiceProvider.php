@@ -3,9 +3,8 @@
 namespace Doctypes\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Doctypes\Services\DoctypeService;
-use Doctypes\Services\DoctypeRenderer;
-use Doctypes\Services\DoctypeValidator;
+use Doctypes\Console\Commands\InstallDoctypeCommand;
+use Doctypes\Console\Commands\GenerateDoctypeCommand;
 
 class DoctypeServiceProvider extends ServiceProvider
 {
@@ -14,12 +13,13 @@ class DoctypeServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->singleton('doctype', function ($app) {
-            return new DoctypeService();
-        });
-
-        $this->app->singleton(DoctypeRenderer::class);
-        $this->app->singleton(DoctypeValidator::class);
+        // Register console commands
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                InstallDoctypeCommand::class,
+                GenerateDoctypeCommand::class,
+            ]);
+        }
     }
 
     /**
